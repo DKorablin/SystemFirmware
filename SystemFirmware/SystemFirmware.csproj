@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{754CA4DE-DF56-488B-BDAF-DB2EE124A4A5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AlphaOmega.Debug</RootNamespace>
+    <AssemblyName>SystemFirmware</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\SystemFirmware.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FileReader\ImageLoader\PinnedBufferReader.cs">
+      <Link>PinnedBufferReader.cs</Link>
+    </Compile>
+    <Compile Include="Firmware.cs" />
+    <Compile Include="FirmwareAcpi.cs" />
+    <Compile Include="FirmwareFirm.cs" />
+    <Compile Include="FirmwareSmBios.cs" />
+    <Compile Include="FWStructs.cs" />
+    <Compile Include="FirmwareT.cs" />
+    <Compile Include="FirmwareTable.cs" />
+    <Compile Include="Native\Acpi.cs" />
+    <Compile Include="Native\FirmwareImage.cs" />
+    <Compile Include="Native\SmBios.cs" />
+    <Compile Include="Native\Methods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Smb\AdditionalInformation.cs" />
+    <Compile Include="Smb\AdditionalInformationEntry.cs" />
+    <Compile Include="Smb\BiosLanguage.cs" />
+    <Compile Include="Smb\Cache.cs" />
+    <Compile Include="Smb\Chassis.cs" />
+    <Compile Include="Smb\CoolingDevice.cs" />
+    <Compile Include="Smb\ElectricalCurrentProbe.cs" />
+    <Compile Include="Smb\GroupAssociations.cs" />
+    <Compile Include="Smb\ManagementDevice.cs" />
+    <Compile Include="Smb\ManagementDeviceComponent.cs" />
+    <Compile Include="Smb\MemoryController.cs" />
+    <Compile Include="Smb\MemoryDevice.cs" />
+    <Compile Include="Smb\MemoryModule.cs" />
+    <Compile Include="Smb\OEMStrings.cs" />
+    <Compile Include="Smb\OnBoardDevices.cs" />
+    <Compile Include="Smb\OnboardDevicesExtended.cs" />
+    <Compile Include="Smb\PortableBattery.cs" />
+    <Compile Include="Smb\PortConnector.cs" />
+    <Compile Include="Smb\Processor.cs" />
+    <Compile Include="Smb\SystemConfigurationOptions.cs" />
+    <Compile Include="Smb\SystemPowerSupply.cs" />
+    <Compile Include="Smb\SystemSlots.cs" />
+    <Compile Include="Smb\TemperatureProbe.cs" />
+    <Compile Include="Smb\TypeBase.cs" />
+    <Compile Include="Smb\TypeBaseT.cs" />
+    <Compile Include="Smb\Bios.cs" />
+    <Compile Include="Smb\SystemType.cs" />
+    <Compile Include="Smb\Baseboard.cs" />
+    <Compile Include="Smb\VoltageProbecs.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
