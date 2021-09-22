@@ -45,7 +45,7 @@ Supported SMBIOS Types:
 	<li>Additional Information (Type 40)</li>
 	<li>Onboard Devices Extended Information (Type 41)</li>
 	<li>Management Controller Host Interface (Type 42) <i>[Not supported]</i></li>
-	<li>TPM Device (Type 43) [Not supported]</li>
+	<li>TPM Device (Type 43) <i>[Not supported]</i></li>
 	<li>Processor Additional Information (Type 44) <i>[Not supported]</i></li>
 </ul>
 
