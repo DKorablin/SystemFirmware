@@ -13,7 +13,7 @@ namespace AlphaOmega.Debug.Smb
 		/// <summary>BIOS release data</summary>
 		public String ReleaseDate { get { return base.GetString(base.Type.ReleaseDate); } }
 		/// <summary>BIOS ROM Size</summary>
-		public String RomSize { get { return String.Format("{0:N0} {1}", base.Type.RomSize, base.Type.RomSizeUnits); } }
+		public String RomSize { get { return $"{base.Type.RomSize:N0} {base.Type.RomSizeUnits}"; } }
 
 		internal Bios(SmBios.Type0 data)
 			: base(data.Header, data)

@@ -13,6 +13,7 @@ namespace AlphaOmega.Debug.Smb
 		/// <summary>Manufacture date</summary>
 		public String ManufactureDate { get { return base.GetString(base.Type.ManufactureDate); } }
 		/// <summary>Serial number</summary>
+		/// <exception cref="NotImplementedException">Not implemented Serial Number</exception>
 		public String SerialNumber
 		{
 			get

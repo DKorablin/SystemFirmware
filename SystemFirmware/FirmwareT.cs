@@ -18,7 +18,7 @@ namespace AlphaOmega.Debug
 			: base(GetTable<T>())
 		{
 			if(data == null || data.Length == 0)
-				throw new ArgumentNullException("payload", "Binary data is required");
+				throw new ArgumentNullException(nameof(data), "Binary data is required");
 
 			using(PinnedBufferReader reader = new PinnedBufferReader(data))
 			{
@@ -26,18 +26,18 @@ namespace AlphaOmega.Debug
 				FWStructs.Header header = reader.BytesToStructure<FWStructs.Header>(ref padding);
 				if(!header.IsValid)
 				{
-					Exception exc = new ArgumentException("Invalid signature", "header.IsValid");
+					Exception exc = new ArgumentException("Invalid signature", nameof(header.IsValid));
 					exc.Data.Add("Header", header.SignatureStr);
 					throw exc;
 				}
 				if(header.Type != base.TableType)
 				{
-					Exception exc = new ArgumentException("Invalid type", "header.Type");
+					Exception exc = new ArgumentException("Invalid type", nameof(header.Type));
 					exc.Data.Add("Type", header.Type);
 					throw exc;
 				}
 				if(header.Count == 0)
-					throw new ArgumentException("No data");
+					throw new ArgumentException("No data", nameof(header.Count));
 
 				this._storage = new Dictionary<UInt32, Byte[]>();
 				for(UInt32 loop = 0; loop < header.Count; loop++)

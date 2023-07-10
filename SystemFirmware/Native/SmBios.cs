@@ -215,10 +215,10 @@ namespace AlphaOmega.Debug.Native
 			/// Types 128 through 256 (0x80 to 0xff) are available for system- and OEM-specific information
 			/// </remarks>
 			public Type Type;
-			/// <summary>Specifies the length of the formatted area of the structure, starting at the Type field.</summary>
+			/// <summary>Specifies the length of the formatted area of the structure, starting at the Type field</summary>
 			/// <remarks>The length of the structure’s string-set is not included.</remarks>
 			public Byte Length;
-			/// <summary>Specifies the structure’s handle, a unique 16-bit number in the range 0 to 0x0fffe (for version 2.0) or 0 to 0x0feff (for version 2.1 and later).</summary>
+			/// <summary>Specifies the structure’s handle, a unique 16-bit number in the range 0 to 0x0fffe (for version 2.0) or 0 to 0x0feff (for version 2.1 and later)</summary>
 			/// <remarks>
 			/// The handle can be used with the Get SMBIOS Structure function to retrieve a specific structure; the handle numbers are not required to be contiguous.
 			/// For version 2.1 and later, handle values in the range 0x0ff00 to 0x0ffff are reserved for use by this specification.[1] 
@@ -369,13 +369,13 @@ namespace AlphaOmega.Debug.Native
 			/// </remarks>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
 			public Byte[] CharacteristicsExtension;
-			/// <summary>Identifies the major release of the System BIOS; for example, the value is 0x0a for revision 10.22 and 0x02 for revision 2.</summary>
+			/// <summary>Identifies the major release of the System BIOS; for example, the value is 0x0a for revision 10.22 and 0x02 for revision 2</summary>
 			/// <remarks>
 			/// This field or the System BIOS Minor Release field or both are updated each time a System BIOS update for a given system is released.
 			/// If the system does not support the use of this field, the value is 0FFh for both this field and the System BIOS Minor Release field.
 			/// </remarks>
 			private Byte MajorRelease;
-			/// <summary>Identifies the minor release of the System BIOS; for example, the value is 0x16 for revision 10.22 and 0x01 for revision 2.1.</summary>
+			/// <summary>Identifies the minor release of the System BIOS; for example, the value is 0x16 for revision 10.22 and 0x01 for revision 2.1</summary>
 			private Byte MinorRelease;
 			/// <summary>Embedded Controller Firmware Major Release</summary>
 			/// <remarks>
@@ -546,11 +546,11 @@ namespace AlphaOmega.Debug.Native
 			[Flags]
 			public enum FeatureFlags : byte
 			{
-				/// <summary>Set to 1 if the board is a hosting board (for example, a motherboard).</summary>
+				/// <summary>Set to 1 if the board is a hosting board (for example, a motherboard)</summary>
 				Motherboard = 1 << 0,
 				/// <summary>Set to 1 if the board requires at least one daughter board or auxiliary card to function properly</summary>
 				RequiresDaughter = 1 << 1,
-				/// <summary>Set to 1 if the board is removable; it is designed to be taken in and out of the chassis without impairing the function of the chassis.</summary>
+				/// <summary>Set to 1 if the board is removable; it is designed to be taken in and out of the chassis without impairing the function of the chassis</summary>
 				Removable = 1 << 2,
 				/// <summary>
 				/// Set to 1 if the board is replaceable; it is possible to replace (either as a field repair or as an upgrade) the board with a physically different board.
@@ -1904,7 +1904,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>String number for reference designation</summary>
 			/// <example>"J202",0</example>
 			public Byte SocketDesignation;
-			/// <summary>Each nibble indicates a bank (RAS#) connection; 0xF means no connection.</summary>
+			/// <summary>Each nibble indicates a bank (RAS#) connection; 0xF means no connection</summary>
 			/// <example>
 			/// If banks 1 and 3 (RAS# 1 and 3) were connected to a SIMM socket the byte for that socket would be 0x13.
 			/// If only bank 2 (RAS 2) were connected, the byte for that socket would be 0x2f
@@ -1915,7 +1915,7 @@ namespace AlphaOmega.Debug.Native
 			/// If the speed is unknown, the field is set to 0.
 			/// </summary>
 			public Byte CurrentSpeed;
-			/// <summary>Describes the physical characteristics of the memory modules that are supported by (and currently installed in) the system.</summary>
+			/// <summary>Describes the physical characteristics of the memory modules that are supported by (and currently installed in) the system</summary>
 			public MemoryTypeFlags CurrentMemoryType;
 			/// <summary>
 			/// The Installed Size fields identify the size of the memory module that is installed in the socket, as determined by reading and correlating the module’s presence-detect information.
@@ -2443,7 +2443,7 @@ namespace AlphaOmega.Debug.Native
 				PciExpressGen2_Sff8639 = 0x1F,
 				/// <summary>PCI Express Gen 3 SFF-8639 (U.2)</summary>
 				PciExpressGen3_Sff8639 = 0x20,
-				/// <summary>PCI Express Mini 52-pin (CEM spec. 2.0) with bottom-side keep-outs.</summary>
+				/// <summary>PCI Express Mini 52-pin (CEM spec. 2.0) with bottom-side keep-outs</summary>
 				/// <remarks>
 				/// Use Slot Length field value
 				/// 0x03 (short length) for "half-Mini card" -only support,
@@ -2458,7 +2458,7 @@ namespace AlphaOmega.Debug.Native
 				/// 0x04 (long length) for "full-Mini card" or dual support.
 				/// </remarks>
 				PciExpressMini52Pin_WithoutBottomSide = 0x22,
-				/// <summary>PCI Express Mini 76-pin (CEM spec. 2.0) Corresponds to Display-Mini card.</summary>
+				/// <summary>PCI Express Mini 76-pin (CEM spec. 2.0) Corresponds to Display-Mini card</summary>
 				PciExpressMini76Pin = 0x23,
 				/// <summary>PCI Express Gen 4 SFF-8639 (U.2)</summary>
 				PciExpressGen4_Sff8639 = 0x24,
@@ -2685,7 +2685,7 @@ namespace AlphaOmega.Debug.Native
 				Volts50 = 1 << 1,
 				/// <summary>Provides 3.3 volts</summary>
 				Volts33 = 1 << 2,
-				/// <summary>Slot’s opening is shared with another slot (for example, PCI/EISA shared slot).</summary>
+				/// <summary>Slot’s opening is shared with another slot (for example, PCI/EISA shared slot)</summary>
 				SharedSlot = 1 << 3,
 				/// <summary>PC Card slot supports PC Card-16</summary>
 				PcCard16_Supported = 1 << 4,
@@ -2707,10 +2707,10 @@ namespace AlphaOmega.Debug.Native
 				HotPlug = 1 << 1,
 				/// <summary>PCI slot supports SMBus signal</summary>
 				SmBus = 1 << 2,
-				/// <summary>PCIe slot supports bifurcation. This slot can partition its lanes into two or more PCIe devices plugged into the slot.</summary>
+				/// <summary>PCIe slot supports bifurcation. This slot can partition its lanes into two or more PCIe devices plugged into the slot</summary>
 				/// <remarks>This field does not indicate complete details on what levels of bifurcation are supported by the slot, but only that the slot supports some level of bifurcation.</remarks>
 				Bifurcation = 1 << 3,
-				/// <summary>Slot supports async/surprise removal (i.e., removal without prior notification to the operating system, device driver, or applications).</summary>
+				/// <summary>Slot supports async/surprise removal (i.e., removal without prior notification to the operating system, device driver, or applications)</summary>
 				AsyncSurpriseRemoval = 1 << 4,
 				/// <summary>Flexbus slot, CXL 1.0 capable</summary>
 				/// <remarks>
@@ -2825,7 +2825,7 @@ namespace AlphaOmega.Debug.Native
 			/// </summary>
 			/// <value>v3.4</value>
 			public Byte SlotInformation;
-			/// <summary>This field indicates the physical width of the slot whereas Slot Data Bus Width (offset 06h) indicates the electrical width of the slot.</summary>
+			/// <summary>This field indicates the physical width of the slot whereas Slot Data Bus Width (offset 06h) indicates the electrical width of the slot</summary>
 			/// <value>v3.4</value>
 			public SlotWidth SlotPhysicalWidth;
 			/// <summary>
@@ -3072,7 +3072,7 @@ namespace AlphaOmega.Debug.Native
 				/// The Access Method Address field contains the 4-byte (Intel DWORD format) starting physical address
 				/// </summary>
 				MemoryMapped32Bit = 0x03,
-				/// <summary>Available through General-Purpose NonVolatile Data functions.</summary>
+				/// <summary>Available through General-Purpose NonVolatile Data functions</summary>
 				GeneralPurpose = 0x04,
 			}
 
@@ -3277,7 +3277,7 @@ namespace AlphaOmega.Debug.Native
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		public struct Type17
 		{
-			/// <summary>Refer to 6.3 for the CIM properties associated with this enumerated value.</summary>
+			/// <summary>Refer to 6.3 for the CIM properties associated with this enumerated value</summary>
 			public enum FormFactorType : byte
 			{
 				/// <summary>Other</summary>
@@ -3439,7 +3439,7 @@ namespace AlphaOmega.Debug.Native
 				IntelOptane = 0x07,
 			}
 
-			/// <summary>The operating modes supported by this memory device.</summary>
+			/// <summary>The operating modes supported by this memory device</summary>
 			[Flags]
 			public enum MemoryOperatingModeCapabilityFlags : ushort
 			{

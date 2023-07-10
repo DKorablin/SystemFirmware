@@ -17,7 +17,7 @@ namespace AlphaOmega.Debug.Native
 			Rsmb = 0x52534D42,
 		}
 
-		/// <summary>Retrieves the specified firmware table from the firmware table provider.</summary>
+		/// <summary>Retrieves the specified firmware table from the firmware table provider</summary>
 		/// <param name="FirmwareTableProviderSignature">
 		/// The identifier of the firmware table provider to which the query is to be directed. This parameter can be one of the following values:
 		/// <list type="bullet">

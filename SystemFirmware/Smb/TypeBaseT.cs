@@ -6,15 +6,13 @@ namespace AlphaOmega.Debug.Smb
 	/// <typeparam name="T">Type of SMBIOS structure</typeparam>
 	public class TypeBaseT<T> : TypeBase where T : struct
 	{
-		private readonly T _type;
-
 		/// <summary>SMBIOS structure</summary>
-		public T Type { get { return this._type; } }
+		public T Type { get ; }
 
 		internal TypeBaseT(SmBios.Header header, T type)
 			: base(header)
 		{
-			this._type = type;
+			this.Type = type;
 			//Utils.ClearOverflowFields(base.Header, ref this._type);
 		}
 	}

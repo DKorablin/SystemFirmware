@@ -1,5 +1,6 @@
 # SystemFirmware
 
+[![Auto build](https://github.com/DKorablin/SystemFirmware/actions/workflows/release.yml/badge.svg)](https://github.com/DKorablin/SystemFirmware/releases/latest)
 [![Nuget](https://img.shields.io/nuget/v/AlphaOmega.SystemFirmware)](https://www.nuget.org/packages/AlphaOmega.SystemFirmware)
 
 Managed wrapper Win32 API functions: [GetSystemFirmwareTable](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemfirmwaretable) and [EnumSystemFirmwareTables](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-enumsystemfirmwaretables)

@@ -21,14 +21,14 @@ namespace AlphaOmega.Debug
 				constSize *= Utils.FileSize;
 				sizePosition++;
 			}
-			return String.Format("{0:n0} {1}", length / constSize, Utils.FileSizeType[sizePosition]);
+			return $"{(length / constSize):n0} {Utils.FileSizeType[sizePosition]}";
 		}
 
-		/// <summary>Чистка полей, которые были взяты как излишек после окончания структуры</summary>
-		/// <remarks>В связи с тем, что в заголовке описан размер структуры, то в самой структуре некоторые значения могут быть меньше чем сама структура</remarks>
-		/// <typeparam name="T">Тип структуры</typeparam>
-		/// <param name="header">Заголовок с размером структуры</param>
-		/// <param name="src">Структура, где изменяются значения</param>
+		/// <summary>Clearing fields that were taken as surplus after the end of the structure</summary>
+		/// <remarks>Due to the fact that the header describes the size of the structure, then in the structure itself, some values may be less than the structure itself</remarks>
+		/// <typeparam name="T">Structure type</typeparam>
+		/// <param name="header">Header with structure size</param>
+		/// <param name="src">Structure where data will clange</param>
 		public static void ClearOverflowFields<T>(SmBios.Header header, ref T src) where T : struct
 		{
 			FieldInfo[] fields = src.GetType().GetFields(BindingFlags.Instance | BindingFlags.GetField | BindingFlags.Public | BindingFlags.NonPublic);

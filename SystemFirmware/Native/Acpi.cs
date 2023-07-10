@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlphaOmega.Debug.Native
 {
-	/// <summary></summary>
+	/// <summary>Known ACPI structures</summary>
 	/// <example>https://uefi.org/specs/ACPI/6.4/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html</example>
 	public static class Acpi
 	{
@@ -152,14 +152,19 @@ namespace AlphaOmega.Debug.Native
 		[StructLayout(LayoutKind.Sequential)]
 		public struct Header
 		{
-			/// <summary>All the ACPI tables have a 4 byte Signature field (except the RSDP which has an 8 byte one). Using the signature, you can determine what table are you working with.</summary>
+			/// <summary>All the ACPI tables have a 4 byte Signature field (except the RSDP which has an 8 byte one)</summary>
+			/// <remarks>Using the signature, you can determine what table are you working with</remarks>
 			public Table Signature;
 
-			/// <summary>Total size of the table, inclusive of the header.</summary>
+			/// <summary>Total size of the table, inclusive of the header</summary>
 			public UInt32 Length;
 			/// <summary>Revision</summary>
 			public Byte Revision;
-			/// <summary>A 8-bit checksum field of the whole table, inclusive of the header. All bytes of the table summed must be equal to 0 (mod 0x100). You should always do a checksum of the table before using it, even if you found the table linked by other tables.</summary>
+			/// <summary>A 8-bit checksum field of the whole table, inclusive of the header</summary>
+			/// <remarks>
+			/// All bytes of the table summed must be equal to 0 (mod 0x100).
+			/// You should always do a checksum of the table before using it, even if you found the table linked by other tables
+			/// </remarks>
 			public Byte Checksum;
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
 			private Byte[] _OemId;
@@ -175,7 +180,8 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Creator Revision</summary>
 			public UInt32 CreatorRevision;
 
-			/// <summary>All the ACPI tables have a 4 byte Signature field (except the RSDP which has an 8 byte one). Using the signature, you can determine what table are you working with.</summary>
+			/// <summary>All the ACPI tables have a 4 byte Signature field (except the RSDP which has an 8 byte one)</summary>
+			/// <remarks>Using the signature, you can determine what table are you working with</remarks>
 			public String SignatureStr { get { return Encoding.ASCII.GetString(BitConverter.GetBytes((Int32)this.Signature)); } }
 
 			/// <summary>OEM Id</summary>

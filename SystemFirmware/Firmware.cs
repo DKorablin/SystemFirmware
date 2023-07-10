@@ -9,16 +9,14 @@ namespace AlphaOmega.Debug
 	/// <summary>Base Firmware facade</summary>
 	public class Firmware
 	{
-		private readonly Methods.FirmwareTableType _tableType;
-
 		/// <summary>Identifier of the firmware table provider</summary>
-		public Methods.FirmwareTableType TableType { get { return this._tableType; } }
+		public Methods.FirmwareTableType TableType { get ; }
 
 		/// <summary>Crate instanceof base firmware table type with requred data</summary>
 		/// <param name="tableType">Required firmware table</param>
 		public Firmware(Methods.FirmwareTableType tableType)
 		{
-			this._tableType = tableType;
+			this.TableType = tableType;
 		}
 
 		/// <summary>Loads all firmware tables from Win32 API</summary>
@@ -26,7 +24,7 @@ namespace AlphaOmega.Debug
 		public virtual IEnumerable<UInt32> EnumFirmwareTables()
 		{
 			Int32 size = Marshal.SizeOf(typeof(UInt64));
-			UInt32 dataSize = Methods.EnumSystemFirmwareTables(this._tableType, IntPtr.Zero, 0);
+			UInt32 dataSize = Methods.EnumSystemFirmwareTables(this.TableType, IntPtr.Zero, 0);
 			if(dataSize == 0)
 				throw new Win32Exception();
 
@@ -34,7 +32,7 @@ namespace AlphaOmega.Debug
 			IntPtr hBuffer = Marshal.AllocHGlobal((Int32)dataSize);
 			try
 			{
-				dataSize = Methods.EnumSystemFirmwareTables(this._tableType, hBuffer, dataSize);
+				dataSize = Methods.EnumSystemFirmwareTables(this.TableType, hBuffer, dataSize);
 				if(dataSize == 0)
 					throw new Win32Exception();
 
@@ -53,7 +51,7 @@ namespace AlphaOmega.Debug
 		/// <returns>Payload</returns>
 		public virtual Byte[] GetSystemFirmwareTable(UInt32 firmwareTableID = 0)
 		{
-			UInt32 dataSize = AlphaOmega.Debug.Native.Methods.GetSystemFirmwareTable(this._tableType, firmwareTableID, IntPtr.Zero, 0);
+			UInt32 dataSize = AlphaOmega.Debug.Native.Methods.GetSystemFirmwareTable(this.TableType, firmwareTableID, IntPtr.Zero, 0);
 			if(dataSize == 0)
 				throw new Win32Exception();
 
@@ -61,7 +59,7 @@ namespace AlphaOmega.Debug
 			IntPtr hBuffer = Marshal.AllocHGlobal((Int32)dataSize);
 			try
 			{
-				dataSize = AlphaOmega.Debug.Native.Methods.GetSystemFirmwareTable(this._tableType, firmwareTableID, hBuffer, dataSize);
+				dataSize = AlphaOmega.Debug.Native.Methods.GetSystemFirmwareTable(this.TableType, firmwareTableID, hBuffer, dataSize);
 				if(dataSize == 0)
 					throw new Win32Exception();
 
