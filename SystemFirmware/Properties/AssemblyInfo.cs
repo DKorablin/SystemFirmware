@@ -7,12 +7,14 @@ using System.Runtime.InteropServices;
 
 [assembly: System.CLSCompliant(false)]
 
-#if !NETSTANDARD
+#if NETSTANDARD
+[assembly: AssemblyMetadata("RepositoryUrl", "https://github.com/DKorablin/SystemFirmware")]
+#else
 [assembly: AssemblyProduct("SystemFirmware")]
 [assembly: AssemblyTitle("SystemFirmware")]
 [assembly: AssemblyDescription("Native GetSystemFirmware wrapper assembly")]
 [assembly: AssemblyCompany("Danila Korablin")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2021")]
+[assembly: AssemblyCopyright("Copyright © Danila Korablin 2021 - 2023")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else

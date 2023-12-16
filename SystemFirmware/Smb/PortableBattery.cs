@@ -7,11 +7,11 @@ namespace AlphaOmega.Debug.Smb
 	public class PortableBattery : TypeBaseT<SmBios.Type22>
 	{
 		/// <summary>Location</summary>
-		public String Location { get { return base.GetString(base.Type.Location); } }
+		public String Location => base.GetString(base.Type.Location);
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer { get { return base.GetString(base.Type.Manufacturer); } }
+		public String Manufacturer => base.GetString(base.Type.Manufacturer);
 		/// <summary>Manufacture date</summary>
-		public String ManufactureDate { get { return base.GetString(base.Type.ManufactureDate); } }
+		public String ManufactureDate => base.GetString(base.Type.ManufactureDate);
 		/// <summary>Serial number</summary>
 		/// <exception cref="NotImplementedException">Not implemented Serial Number</exception>
 		public String SerialNumber
@@ -29,15 +29,14 @@ namespace AlphaOmega.Debug.Smb
 			}
 		}
 		/// <summary>Device name</summary>
-		public String DeviceName { get { return base.GetString(base.Type.DeviceName); } }
+		public String DeviceName => base.GetString(base.Type.DeviceName);
 		/// <summary>SBDS version number</summary>
-		public String SBDSVersionNumber { get { return base.GetString(base.Type.SBDSVersionNumber); } }
+		public String SBDSVersionNumber => base.GetString(base.Type.SBDSVersionNumber);
 		/// <summary>SBDS Device chemistry</summary>
-		public String SBDSDeviceChemistry { get { return base.GetString(base.Type.SBDSDeviceChemistry); } }
+		public String SBDSDeviceChemistry => base.GetString(base.Type.SBDSDeviceChemistry);
 
 		internal PortableBattery(SmBios.Type22 type22)
 			: base(type22.Header, type22)
-		{
-		}
+		{ }
 	}
 }

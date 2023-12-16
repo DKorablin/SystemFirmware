@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class TemperatureProbe : TypeBaseT<SmBios.Type28>
 	{
 		/// <summary>Description</summary>
-		public String Description { get { return base.GetString(base.Type.Description); } }
+		public String Description => base.GetString(base.Type.Description);
 
 		internal TemperatureProbe(SmBios.Type28 type28)
 			: base(type28.Header, type28)
-		{
-		}
+		{ }
 	}
 }

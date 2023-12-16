@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class GroupAssociations : TypeBaseT<SmBios.Type14>
 	{
 		/// <summary>Group name</summary>
-		public String GroupName { get { return base.GetString(base.Type.GroupName); } }
+		public String GroupName => base.GetString(base.Type.GroupName);
 
 		internal GroupAssociations(SmBios.Type14 type14)
 			: base(type14.Header, type14)
-		{
-		}
+		{ }
 	}
 }

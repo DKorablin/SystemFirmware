@@ -9,7 +9,7 @@ namespace AlphaOmega.Debug.Native
 	public static class Acpi
 	{
 		/// <summary>Known ACPI headers</summary>
-		public enum Table : uint
+		public enum Table : UInt32
 		{
 			/// <summary>Multiple APIC Description Table (MADT)</summary>
 			APIC = 0x43495041,
@@ -182,16 +182,16 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>All the ACPI tables have a 4 byte Signature field (except the RSDP which has an 8 byte one)</summary>
 			/// <remarks>Using the signature, you can determine what table are you working with</remarks>
-			public String SignatureStr { get { return Encoding.ASCII.GetString(BitConverter.GetBytes((Int32)this.Signature)); } }
+			public String SignatureStr => Encoding.ASCII.GetString(BitConverter.GetBytes((Int32)this.Signature));
 
 			/// <summary>OEM Id</summary>
-			public String OemId { get { return Encoding.ASCII.GetString(this._OemId); } }
+			public String OemId => Encoding.ASCII.GetString(this._OemId);
 
 			/// <summary>OEM table Id</summary>
-			public String OemTableId { get { return Encoding.ASCII.GetString(this._OemTableId); } }
+			public String OemTableId => Encoding.ASCII.GetString(this._OemTableId);
 
 			/// <summary>Creator Id</summary>
-			public String CreatorId { get { return Encoding.ASCII.GetString(this._CreatorId); } }
+			public String CreatorId => Encoding.ASCII.GetString(this._CreatorId);
 		}
 	}
 }

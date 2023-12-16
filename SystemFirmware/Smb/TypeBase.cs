@@ -35,18 +35,14 @@ namespace AlphaOmega.Debug.Smb
 		/// <summary>Creates instance if base type facade</summary>
 		/// <param name="header">SMBIOS type header</param>
 		protected internal TypeBase(SmBios.Header header)
-		{
-			this.Header = header;
-		}
+			=> this.Header = header;
 
 		/// <summary>Gets the string by index</summary>
 		/// <param name="index">Index</param>
 		/// <returns>String</returns>
 		protected String GetString(Byte index)
-		{
-			return index > 0
+			=> index > 0
 				? this.Strings[index - 1]
 				: null;
-		}
 	}
 }

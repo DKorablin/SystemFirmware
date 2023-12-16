@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class SystemConfigurationOptions : TypeBaseT<SmBios.Type12>
 	{
 		/// <summary>Options</summary>
-		public String[] Options { get { return base.Strings; } }
+		public String[] Options => base.Strings;
 
 		internal SystemConfigurationOptions(SmBios.Type12 type12)
 			: base(type12.Header, type12)
-		{
-		}
+		{ }
 	}
 }

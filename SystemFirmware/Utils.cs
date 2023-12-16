@@ -8,7 +8,7 @@ namespace AlphaOmega.Debug
 	internal static class Utils
 	{
 		private const Int64 FileSize = 1024;
-		private static String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
+		private static readonly String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
 		/// <summary>Convert file size in bytes to string with dimention</summary>
 		/// <param name="length">size in bytes</param>
 		/// <returns>Size with dimention</returns>
@@ -51,7 +51,7 @@ namespace AlphaOmega.Debug
 		/// <typeparam name="T">Structure type</typeparam>
 		/// <param name="data">Struncture data</param>
 		/// <returns>bytes</returns>
-		public static Byte[] ConvertToBytes<T>(T data) where T:struct
+		public static Byte[] ConvertToBytes<T>(T data) where T : struct
 		{
 			Int32 sizeOfStruct = Marshal.SizeOf(data);
 			IntPtr ptr = Marshal.AllocHGlobal(sizeOfStruct);

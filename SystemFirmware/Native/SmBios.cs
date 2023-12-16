@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Native
 	public static class SmBios
 	{
 		/// <summary>System Management BIOS (SMBIOS) Reference Specification</summary>
-		public enum Type : byte
+		public enum Type : Byte
 		{
 			/// <summary>BIOS Information (Type 0)</summary>
 			/// <remarks>
@@ -171,7 +171,7 @@ namespace AlphaOmega.Debug.Native
 		}
 
 		/// <summary>System Enclosure or Chassis Security Status field</summary>
-		public enum ChasisSecurityStatus : byte
+		public enum ChasisSecurityStatus : Byte
 		{
 			/// <summary>Other</summary>
 			Other = 0x01,
@@ -200,7 +200,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Length</summary>
 			public UInt32 Length;
 			/// <summary>SMBIOS version</summary>
-			public Version SMBIOSVersion { get { return new Version(this.SMBIOSMajorVersion, this.SMBIOSMinorVersion); } }
+			public Version SMBIOSVersion => new Version(this.SMBIOSMajorVersion, this.SMBIOSMinorVersion);
 			//[MarshalAs(UnmanagedType.ByValArray, SizeConst = 255)]
 			//public Byte[] SMBIOSTableData;
 		}
@@ -235,7 +235,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Array of BIOS characteristics supported by the system as defined by the System Management BIOS Reference Specification</summary>
 			[Flags]
-			public enum BiosCharacteristics : ulong
+			public enum BiosCharacteristics : UInt64
 			{
 				/// <summary>Reserved</summary>
 				Reserved0 = 1L << 0,
@@ -320,7 +320,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>BIOS size type</summary>
-			public enum SizeType : byte
+			public enum SizeType : Byte
 			{
 				/// <summary>Size in megabytes</summary>
 				Mb=0x00,
@@ -406,48 +406,28 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>BIOS ROM size</summary>
 			public UInt32 RomSize
-			{
-				get
-				{
-					return this._RomSize != 0xff
-						? (UInt32)(this._RomSize + 1 * 64)
-						: (UInt32)(this.ExtendedBiosRomSize >> 0 & 0x3fff);
-				}
-			}
+				=> this._RomSize != 0xff
+					? (UInt32)(this._RomSize + 1 * 64)
+					: (UInt32)(this.ExtendedBiosRomSize & 0x3fff);
 
 			/// <summary>BIOS ROM size units</summary>
 			public SizeType RomSizeUnits
-			{
-				get
-				{
-					return this._RomSize != 0xff
-						? SizeType.Kb
-						: (SizeType)(this.ExtendedBiosRomSize >> 14 & 0x03);
-				}
-			}
+				=> this._RomSize != 0xff
+					? SizeType.Kb
+					: (SizeType)(this.ExtendedBiosRomSize >> 14 & 0x03);
 
 			/// <summary>System BIOS release version</summary>
 			public Version ReleaseVersion
-			{
-				get
-				{
-					return this.Header.Length > 0x14
-						? new Version(this.MajorRelease, this.MinorRelease)
-						: null;
-				}
-			}
+				=> this.Header.Length > 0x14
+					? new Version(this.MajorRelease, this.MinorRelease)
+					: null;
 
 			/// <summary>Embedded Controller Firmware</summary>
 			/// <remarks>Identifies release of the embedded controller firmware</remarks>
 			public Version EmbeddedControllerFirmwareRelease
-			{
-				get
-				{
-					return this.Header.Length > 0x14 && this.EmbeddedControllerFirmwareMajor != 0xff && this.EmbeddedControllerFirmwareMinor != 0xff
-						? new Version(this.EmbeddedControllerFirmwareMajor, this.EmbeddedControllerFirmwareMinor)
-						: null;
-				}
-			}
+				=> this.Header.Length > 0x14 && this.EmbeddedControllerFirmwareMajor != 0xff && this.EmbeddedControllerFirmwareMinor != 0xff
+					? new Version(this.EmbeddedControllerFirmwareMajor, this.EmbeddedControllerFirmwareMinor)
+					: null;
 		}
 
 		/// <summary>System Information (Type 1)</summary>
@@ -458,13 +438,13 @@ namespace AlphaOmega.Debug.Native
 		[StructLayout(LayoutKind.Sequential,Pack=1)]
 		public struct Type1
 		{
-			private enum VersionOffset : byte
+			private enum VersionOffset : Byte
 			{
 				V21 = 0x08,
 			}
 
 			/// <summary>Shows what the byte values mean for the System — Wake-up Type</summary>
-			public enum WakeUpType : byte
+			public enum WakeUpType : Byte
 			{
 				/// <summary>Reserved</summary>
 				Reserved = 0x00,
@@ -532,7 +512,7 @@ namespace AlphaOmega.Debug.Native
 			/// It requires no central registration process. The UUID is 128 bits long.
 			/// Its format is described in RFC4122, but the actual field contents are opaque and not significant to the SMBIOS specification, which is only concerned with the byte order.
 			/// </remarks>
-			public Guid? UUID { get { return this.Header.Length > (Byte)Type1.VersionOffset.V21 ? new Guid(this._UUID) : (Guid?)null; } }
+			public Guid? UUID => this.Header.Length > (Byte)Type1.VersionOffset.V21 ? new Guid(this._UUID) : (Guid?)null;
 		}
 
 		/// <summary>Baseboard (or Module) Information (Type 2)</summary>
@@ -544,7 +524,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Collection of flags that identify features of this baseboard</summary>
 			[Flags]
-			public enum FeatureFlags : byte
+			public enum FeatureFlags : Byte
 			{
 				/// <summary>Set to 1 if the board is a hosting board (for example, a motherboard)</summary>
 				Motherboard = 1 << 0,
@@ -565,7 +545,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Baseboard — Board Type</summary>
-			public enum BoardType : byte
+			public enum BoardType : Byte
 			{
 				/// <summary>Unknown</summary>
 				Unknown = 0x01,
@@ -643,7 +623,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type3
 		{
 			/// <summary>Chassis type</summary>
-			public enum EnclosureType : byte
+			public enum EnclosureType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -734,7 +714,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>System Enclosure or Chassis States</summary>
-			public enum ChassisState : byte
+			public enum ChassisState : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -830,9 +810,9 @@ namespace AlphaOmega.Debug.Native
 
 
 			/// <summary>Lock is present</summary>
-			public Boolean ChassisLockPresent { get { return (this._Type >> 7 & 0x01) == 0x01; } }
+			public Boolean ChassisLockPresent => ((this._Type >> 7) & 0x01) == 0x01;
 			/// <summary>Type</summary>
-			public EnclosureType Type { get { return (EnclosureType)(this._Type >> 0 & 0x3f); } }
+			public EnclosureType Type => (EnclosureType)(this._Type & 0x3f);
 		}
 
 		/// <summary>Processor Information (Type 4)</summary>
@@ -845,7 +825,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type4
 		{
 			/// <summary>Processor type</summary>
-			public enum ProcessorType : byte
+			public enum ProcessorType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -871,7 +851,7 @@ namespace AlphaOmega.Debug.Native
 			/// 0x92 = 0x80 + (1.8 * 10) = 0x80 + 18 = 0x80 +12
 			/// </example>
 			[Flags]
-			public enum VoltageFlags : byte
+			public enum VoltageFlags : Byte
 			{
 				/// <summary>Voltage Capability 5V</summary>
 				_5V = 1 << 0,
@@ -885,7 +865,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Processor Status</summary>
 			[Flags]
-			public enum ProcessorStatusFlags : byte
+			public enum ProcessorStatusFlags : Byte
 			{
 				/// <summary>Unknown</summary>
 				Unknown = 1 << 0,
@@ -902,7 +882,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>What the byte values mean for the Processor Information — Processor Upgrade</summary>
-			public enum ProcessorUpgradeType : byte
+			public enum ProcessorUpgradeType : Byte
 			{
 				/// <summary></summary>
 				Other = 0x01,
@@ -1032,7 +1012,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Defines which functions the processor support</summary>
 			[Flags]
-			public enum ProcessorCharacteristicsFlags : ushort
+			public enum ProcessorCharacteristicsFlags : UInt16
 			{
 				/// <summary>Reserved</summary>
 				Reserved = 1 << 0,
@@ -1057,7 +1037,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Processor family</summary>
-			public enum ProcessorFamilyType : ushort
+			public enum ProcessorFamilyType : UInt16
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -1735,26 +1715,21 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Processor family</summary>
 			public ProcessorFamilyType ProcessorFamily
-			{
-				get
-				{
-					return (ProcessorFamilyType)(this.ProcessorFamily1 <= (Byte)ProcessorFamilyType.Indicator
-						? this.ProcessorFamily1
-						: (this.ProcessorFamily2 << 8) + this.ProcessorFamily1);
-				}
-			}
+				=> (ProcessorFamilyType)(this.ProcessorFamily1 <= (Byte)ProcessorFamilyType.Indicator
+					? this.ProcessorFamily1
+					: (this.ProcessorFamily2 << 8) + this.ProcessorFamily1);
 
 			/// <summary>CPU status</summary>
-			public ProcessorStatusFlags Status { get { return (ProcessorStatusFlags)(this._Status >> 0 & 0x03); } }
+			public ProcessorStatusFlags Status => (ProcessorStatusFlags)(this._Status & 0x03);
 			/// <summary>CPU Socket populated</summary>
-			public Boolean StatusPopulated { get { return (this._Status >> 6 & 0x01) == 0x01; } }
+			public Boolean StatusPopulated => (this._Status >> 6 & 0x01) == 0x01;
 
 			/// <summary>Thread count</summary>
-			public UInt32 ThreadCount { get { return this._ThreadCount == Byte.MaxValue ? this._ThreadCount2 : this._ThreadCount; } }
+			public UInt32 ThreadCount => this._ThreadCount == Byte.MaxValue ? this._ThreadCount2 : this._ThreadCount;
 			/// <summary>Core count</summary>
-			public UInt16 CoreCount { get { return this._CoreCount == 0xff ? this._CoreCount2 : this._CoreCount; } }
+			public UInt16 CoreCount => this._CoreCount == 0xff ? this._CoreCount2 : this._CoreCount;
 			/// <summary>Core enabled count</summary>
-			public UInt16 CoreEnabled { get { return this._CoreEnabled == 0xff ? this._CoreEnabled2 : this._CoreEnabled; } }
+			public UInt16 CoreEnabled => this._CoreEnabled == 0xff ? this._CoreEnabled2 : this._CoreEnabled;
 		}
 
 		/// <summary>Memory Controller Information (Type 5, Obsolete)</summary>
@@ -1766,7 +1741,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type5
 		{
 			/// <summary>Byte values for the Memory Controller Error Detecting Method field</summary>
-			public enum ErrorDetectingMethodType : byte
+			public enum ErrorDetectingMethodType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -1788,7 +1763,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Byte values for the Memory Controller Information — Interleave Support field</summary>
 			[Flags]
-			public enum ErrorCorrectingCapabilityFlags : byte
+			public enum ErrorCorrectingCapabilityFlags : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 1 << 0,
@@ -1805,7 +1780,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Interleave Support field</summary>
-			public enum InterleaveType : byte
+			public enum InterleaveType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -1873,7 +1848,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Memory module type</summary>
 			[Flags]
-			public enum MemoryTypeFlags : short
+			public enum MemoryTypeFlags : Int16
 			{
 				/// <summary>Other</summary>
 				Other = 1 << 0,
@@ -1949,7 +1924,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>SRAM Type</summary>
 			[Flags]
-			public enum SramTypeFlags : ushort
+			public enum SramTypeFlags : UInt16
 			{
 				/// <summary>Other</summary>
 				Other = 1 << 0,
@@ -1968,7 +1943,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Error-correction scheme supported by this cache component</summary>
-			public enum ErrorCorrectionType : byte
+			public enum ErrorCorrectionType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -1985,7 +1960,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>System Cache Type</summary>
-			public enum SystemCacheType : byte
+			public enum SystemCacheType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2000,7 +1975,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Associativity of the cache</summary>
-			public enum AssociativityType : byte
+			public enum AssociativityType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2033,7 +2008,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Cache configuration Operational Mode</summary>
-			public enum CacheConfigurationOperationalModeType : byte
+			public enum CacheConfigurationOperationalModeType : Byte
 			{
 				/// <summary>Write Through</summary>
 				WriteThrough = 0x00,
@@ -2046,7 +2021,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Cache configuration Location, relative to the CPU module</summary>
-			public enum CacheConfigurationLocationType : byte
+			public enum CacheConfigurationLocationType : Byte
 			{
 				/// <summary>Internal</summary>
 				Internal = 0x00,
@@ -2151,24 +2126,24 @@ namespace AlphaOmega.Debug.Native
 			public UInt32 InstalledCacheSize2;
 
 			/// <summary>Operational Mode</summary>
-			public CacheConfigurationOperationalModeType CacheConfigurationOperationalMode { get { return (CacheConfigurationOperationalModeType)(this.CacheConfiguration >> 8 & 3); } }
+			public CacheConfigurationOperationalModeType CacheConfigurationOperationalMode => (CacheConfigurationOperationalModeType)((this.CacheConfiguration >> 8) & 3);
 
 			/// <summary>Enabled/Disabled (at boot time)</summary>
-			public Boolean CacheConfigurationEnabled { get { return (this.CacheConfiguration >> 7 & 1) == 1; } }
+			public Boolean CacheConfigurationEnabled => ((this.CacheConfiguration >> 7) & 1) == 1;
 
 			/// <summary>Location, relative to the CPU module</summary>
-			public CacheConfigurationLocationType CacheConfigurationLocation { get { return (CacheConfigurationLocationType)(this.CacheConfiguration >> 5 & 3); } }
+			public CacheConfigurationLocationType CacheConfigurationLocation => (CacheConfigurationLocationType)((this.CacheConfiguration >> 5) & 3);
 
 			/// <summary>Socketed/not socketed</summary>
-			public Boolean CacheConfigurationSoceted { get { return (this.CacheConfiguration >> 3 & 1) == 1; } }
+			public Boolean CacheConfigurationSoceted => ((this.CacheConfiguration >> 3) & 1) == 1;
 
 			/// <summary>Cache level</summary>
-			public Byte CacheConfigurationLevel { get { return (Byte)(this.CacheConfiguration >> 0 & 3); } }
+			public Byte CacheConfigurationLevel => (Byte)(this.CacheConfiguration & 3);
 
 			/// <summary>True - 64K granularity; False - 1K granularity</summary>
-			public Boolean MaximumCacheSize64KGranularity { get { return (this.MaximumCacheSize >> 15 & 1) == 1; } }
+			public Boolean MaximumCacheSize64KGranularity => ((this.MaximumCacheSize >> 15) & 1) == 1;
 			/// <summary>Maximum cache size</summary>
-			public UInt16 MaximumCacheSizeNoGranularity { get { return (UInt16)(this.MaximumCacheSize >> 0 & 0x7fff); } }
+			public UInt16 MaximumCacheSizeNoGranularity => (UInt16)(this.MaximumCacheSize & 0x7fff);
 		}
 
 		/// <summary>Port Connector Information (Type 8)</summary>
@@ -2181,7 +2156,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type8
 		{
 			/// <summary>Shows the values of the bytes in the Port Information — Connector Types field</summary>
-			public enum ConnectorType : byte
+			public enum ConnectorType : Byte
 			{
 				/// <summary>None</summary>
 				None = 0x00,
@@ -2268,7 +2243,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Describes the function of the port</summary>
-			public enum PortType : byte
+			public enum PortType : Byte
 			{
 				/// <summary>None</summary>
 				None = 0x00,
@@ -2377,7 +2352,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type9
 		{
 			/// <summary>System Slots — Slot Type</summary>
-			public enum SlotType : byte
+			public enum SlotType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2607,7 +2582,7 @@ namespace AlphaOmega.Debug.Native
 			/// For PCI Express, width refers to the maximum supported electrical width of the “data bus”;
 			/// physical slot width is described in System Slots – Slot Type, and the actual link width resulting from PCI Express link training can be read from configuration space.
 			/// </remarks>
-			public enum SlotWidthType : byte
+			public enum SlotWidthType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2640,7 +2615,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>System Slots — Current Usage field</summary>
-			public enum CurrentUsageType : byte
+			public enum CurrentUsageType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2659,7 +2634,7 @@ namespace AlphaOmega.Debug.Native
 			/// For EDSFF E1.S slots, use "short length". For EDSFF E1.L slots, use "long length".
 			/// For EDSFF E3.S slots, use "short length". For EDSFF E3.L slots, use "long length".
 			/// </remarks>
-			public enum SlotLengthType : byte
+			public enum SlotLengthType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2677,7 +2652,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Slot Characteristics 1</summary>
 			[Flags]
-			public enum SlotCharacteristicsFlags1 : byte
+			public enum SlotCharacteristicsFlags1 : Byte
 			{
 				/// <summary>Characteristics unknown</summary>
 				Unknown = 1 << 0,
@@ -2699,7 +2674,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Slot Characteristics 2</summary>
 			[Flags]
-			public enum SlotCharacteristicsFlags2 : byte
+			public enum SlotCharacteristicsFlags2 : Byte
 			{
 				/// <summary>PCI slot supports Power Management Event (PME#) signal</summary>
 				PowerManagementEvent = 1 << 0,
@@ -2842,9 +2817,9 @@ namespace AlphaOmega.Debug.Native
 			public UInt16 SlotPitch;*/
 
 			/// <summary>Device number</summary>
-			public Int32 DeviceNumber { get { return this.DeviceFunctionNumber >> 3 & 15; } }
+			public Int32 DeviceNumber => (this.DeviceFunctionNumber >> 3) & 15;
 			/// <summary>Function number</summary>
-			public Int32 FunctionNumber { get { return this.DeviceFunctionNumber >> 0 & 7; } }
+			public Int32 FunctionNumber => this.DeviceFunctionNumber & 7;
 		}
 
 		/// <summary>On Board Devices Information (Type 10, Obsolete)</summary>
@@ -2857,7 +2832,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type10
 		{
 			/// <summary>Type of the onBoard device</summary>
-			public enum DeviceType : byte
+			public enum DeviceType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -2884,7 +2859,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>SMBIOS type header</summary>
 			public Header Header;
 			/// <summary>Number of Devices</summary>
-			public UInt32 NumberOfDevices { get { return (UInt32)(this.Header.Length - 4) / 2; } }
+			public UInt32 NumberOfDevices => (UInt32)(this.Header.Length - 4) / 2;
 			//TODO: Varable length array follows
 		}
 
@@ -3050,7 +3025,7 @@ namespace AlphaOmega.Debug.Native
 		{
 			/// <summary>Defines the Location and Method used by higher-level software to access the log area</summary>
 			[Flags]
-			public enum AccessMethodType : byte
+			public enum AccessMethodType : Byte
 			{
 				/// <summary>
 				/// Indexed I/O: 1 8-bit index port, 1 8-bit data port.
@@ -3077,7 +3052,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Format of the log header area</summary>
-			public enum LogHeaderType : byte
+			public enum LogHeaderType : Byte
 			{
 				/// <summary>No header (for example, the header is 0 bytes in length)</summary>
 				NoHeader = 0x00,
@@ -3154,7 +3129,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type16
 		{
 			/// <summary>Physical location of the Memory Array, whether on the system board or an add-in board</summary>
-			public enum LocationType : byte
+			public enum LocationType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3189,7 +3164,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Function for which the array is used</summary>
-			public enum UseType : byte
+			public enum UseType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3208,7 +3183,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Primary hardware error correction or detection method supported by this memory array</summary>
-			public enum MemoryErrorCorrectionType : byte
+			public enum MemoryErrorCorrectionType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3278,7 +3253,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type17
 		{
 			/// <summary>Refer to 6.3 for the CIM properties associated with this enumerated value</summary>
-			public enum FormFactorType : byte
+			public enum FormFactorType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3315,7 +3290,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Type of memory used in this device</summary>
-			public enum MemoryType : byte
+			public enum MemoryType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3384,7 +3359,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Additional detail on the memory device type</summary>
-			public enum MemoryDeviceTypeDetailFlags : ushort
+			public enum MemoryDeviceTypeDetailFlags : UInt16
 			{
 				/// <summary>Reserved</summary>
 				Reserved = 1 << 0,
@@ -3421,7 +3396,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Memory technology type for this memory device</summary>
-			public enum MemoryTechnologyType : byte
+			public enum MemoryTechnologyType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3441,7 +3416,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>The operating modes supported by this memory device</summary>
 			[Flags]
-			public enum MemoryOperatingModeCapabilityFlags : ushort
+			public enum MemoryOperatingModeCapabilityFlags : UInt16
 			{
 				/// <summary>Reserved, set to 0</summary>
 				Reserved = 1 << 0,
@@ -3813,9 +3788,9 @@ namespace AlphaOmega.Debug.Native
 			public UInt32 ExtendedConfiguredMemorySpeed;
 
 			/// <summary>True - kilobytes; False - megabytes</summary>
-			public Boolean IsSizeInKb { get { return (this._Size >> 15 & 0x01)==0x01; } }
+			public Boolean IsSizeInKb => ((this._Size >> 15) & 0x01)==0x01;
 			/// <summary>Attributes Rank</summary>
-			public Byte? AttributesRank { get { return this.Attributes > 0 ? (Byte)(this.Attributes >> 0 & 0x07) : (Byte?)null; } }
+			public Byte? AttributesRank => this.Attributes > 0 ? (Byte)(this.Attributes & 0x07) : (Byte?)null;
 			/// <summary>Size</summary>
 			/// <remarks>Size of the memory device</remarks>
 			public UInt32 Size
@@ -3842,7 +3817,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type18
 		{
 			/// <summary>Type of error that is associated with the current status reported for the memory array or device</summary>
-			public enum ErrorType : byte
+			public enum ErrorType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3876,7 +3851,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Type of error that is associated with the current status reported for the memory array or device</summary>
 			/// <remarks>Refer to 6.3 for the CIM properties associated with this enumerated value.</remarks>
-			public enum ErrorOperationType : byte
+			public enum ErrorOperationType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -3891,7 +3866,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Granularity (for example, device versus Partition) to which the error can be resolved</summary>
-			public enum ErrorGranularityType : byte
+			public enum ErrorGranularityType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4080,7 +4055,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type21
 		{
 			/// <summary>Type of pointing device</summary>
-			public enum PointingDeviceType : byte
+			public enum PointingDeviceType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4103,7 +4078,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Interface type for the pointing device</summary>
-			public enum PointingDeviceInterfaceType : byte
+			public enum PointingDeviceInterfaceType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4156,7 +4131,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type22
 		{
 			/// <summary>Identifies the battery chemistry</summary>
-			public enum DeviceChemistryType : byte
+			public enum DeviceChemistryType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4352,7 +4327,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type24
 		{
 			/// <summary>Identifies the password and reset status for the system</summary>
-			public enum HardwareSecurityStatus : byte
+			public enum HardwareSecurityStatus : Byte
 			{
 				/// <summary>Disabled</summary>
 				Disabled = 0x00,
@@ -4394,13 +4369,13 @@ namespace AlphaOmega.Debug.Native
 			private Byte HardwareSecuritySettings;
 
 			/// <summary>Front Panel Reset Status</summary>
-			public HardwareSecurityStatus FrontPanelResetStatus { get { return (HardwareSecurityStatus)(this.HardwareSecuritySettings >> 0 & 0x03); } }
+			public HardwareSecurityStatus FrontPanelResetStatus => (HardwareSecurityStatus)(this.HardwareSecuritySettings & 0x03);
 			/// <summary>Administrator Password Status</summary>
-			public HardwareSecurityStatus AdministratorPasswordStatus { get { return (HardwareSecurityStatus)(this.HardwareSecuritySettings >> 2 & 0x03); } }
+			public HardwareSecurityStatus AdministratorPasswordStatus => (HardwareSecurityStatus)((this.HardwareSecuritySettings >> 2) & 0x03);
 			/// <summary>Keyboard Password Status</summary>
-			public HardwareSecurityStatus KeyboardPasswordStatus { get { return (HardwareSecurityStatus)(this.HardwareSecuritySettings >> 4 & 0x03); } }
+			public HardwareSecurityStatus KeyboardPasswordStatus => (HardwareSecurityStatus)((this.HardwareSecuritySettings >> 4) & 0x03);
 			/// <summary>Power-on Password Status</summary>
-			public HardwareSecurityStatus PowerOnPasswordStatus { get { return (HardwareSecurityStatus)(this.HardwareSecuritySettings >> 6 & 0x03); } }
+			public HardwareSecurityStatus PowerOnPasswordStatus => (HardwareSecurityStatus)((this.HardwareSecuritySettings >> 6) & 0x03);
 		}
 
 		/// <summary>System Power Controls (Type 25) </summary>
@@ -4451,7 +4426,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type26
 		{
 			/// <summary>Probe's physical location</summary>
-			public enum LocationType : byte
+			public enum LocationType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4478,7 +4453,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Phrobe's physical status</summary>
-			public enum StatusType : byte
+			public enum StatusType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4545,11 +4520,11 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Location</summary>
 			/// <reamrks>Probe’s physical location of the voltage monitored by this voltage probe</reamrks>
-			public LocationType Location { get { return (LocationType)(this.LocationAndStatus >> 0 & 0x1f); } }
+			public LocationType Location => (LocationType)(this.LocationAndStatus & 0x1f);
 
 			/// <summary>Status</summary>
 			/// <reamrks>Probe’s physical status of the voltage monitored by this voltage probe</reamrks>
-			public StatusType Status { get { return (StatusType)(this.LocationAndStatus >> 5 & 0x7); } }
+			public StatusType Status => (StatusType)((this.LocationAndStatus >> 5) & 0x7);
 		}
 
 		/// <summary>Cooling Device (Type 27)</summary>
@@ -4562,7 +4537,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type27
 		{
 			/// <summary>Cooling device status</summary>
-			public enum StatusType : byte
+			public enum StatusType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4579,7 +4554,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Cooling device type</summary>
-			public enum DeviceType : byte
+			public enum DeviceType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4643,13 +4618,13 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Device</summary>
 			/// <remarks>Cooling device physical location of the voltage monitored by this voltage probe (TODO: Промахнулся?)</remarks>
-			public DeviceType Device { get { return (DeviceType)(this.DeviceTypeAndStatus >> 0 & 0x1f); } }
+			public DeviceType Device => (DeviceType)(this.DeviceTypeAndStatus & 0x1f);
 			/// <summary>Status</summary>
 			/// <remarks>Cooling device physical status of the voltage monitored by this voltage probe (TODO: Промахнулся?)</remarks>
-			public StatusType Status { get { return (StatusType)(this.DeviceTypeAndStatus >> 5 & 0x7); } }
+			public StatusType Status => (StatusType)((this.DeviceTypeAndStatus >> 5) & 0x7);
 			/// <summary>Nominal speed</summary>
 			/// <remarks>Nominal value for the cooling device’s rotational speed, in revolutions-per-minute (rpm)</remarks>
-			public UInt16 NominalSpeed { get { return this.Header.Length > 0x0c ? this._NominalSpeed : (UInt16)0x8000; } }
+			public UInt16 NominalSpeed => this.Header.Length > 0x0c ? this._NominalSpeed : (UInt16)0x8000;
 		}
 
 		/// <summary>Temperature Probe (Type 28)</summary>
@@ -4717,7 +4692,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type29
 		{
 			/// <summary>Electrical current probe location</summary>
-			public enum LocationType : byte
+			public enum LocationType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4742,8 +4717,9 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Add-in Card</summary>
 				AddInCard = 0x0b,
 			}
+
 			/// <summary>Electrical current probe status</summary>
-			public enum StatusType : byte
+			public enum StatusType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4811,13 +4787,13 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>Location</summary>
 			/// <remarks>Defines the probe’s physical location of the current monitored by this current probe</remarks>
-			public LocationType Location { get { return (LocationType)(this.LocationAndStatus >> 0 & 0x1f); } }
+			public LocationType Location => (LocationType)(this.LocationAndStatus & 0x1f);
 			/// <summary>Status</summary>
 			/// <remarks>Defines the probe’s status of the current monitored by this current probe</remarks>
-			public StatusType Status { get { return (StatusType)(this.LocationAndStatus >> 5 & 0x7); } }
+			public StatusType Status => (StatusType)((this.LocationAndStatus >> 5) & 0x7);
 			/// <summary>Nominal value</summary>
 			/// <remarks>Nominal value for the probe’s reading in milliamp</remarks>
-			public UInt16 NominalValue { get { return this.Header.Length > 0x14 ? this._NominalValue : (UInt16)0x8000; } }
+			public UInt16 NominalValue => this.Header.Length > 0x14 ? this._NominalValue : (UInt16)0x8000;
 		}
 
 		/// <summary>Out-of-Band Remote Access (Type 30)</summary>
@@ -4847,9 +4823,9 @@ namespace AlphaOmega.Debug.Native
 			/// </remarks>
 			private Byte Connections;
 			/// <summary>Inbound Connection Enabled</summary>
-			public Boolean InboundConnectionEnabled { get { return (this.Connections >> 0 & 0x01) == 0x01; } }
+			public Boolean InboundConnectionEnabled => (this.Connections & 0x01) == 0x01;
 			/// <summary>Outbound Connection Enabled</summary>
-			public Boolean OutboundConnectionEnabled { get { return (this.Connections >> 1 & 0x01) == 0x01; } }
+			public Boolean OutboundConnectionEnabled => ((this.Connections >> 1) & 0x01) == 0x01;
 		}
 
 		/// <summary>System Boot Information (Type 32)</summary>
@@ -4928,7 +4904,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type34
 		{
 			/// <summary>Device’s type</summary>
-			public enum ManagementDeviceType : byte
+			public enum ManagementDeviceType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -4959,7 +4935,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Type of addressing used to access the device</summary>
-			public enum ManagementDeviceAddressType : byte
+			public enum ManagementDeviceAddressType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5056,7 +5032,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type37
 		{
 			/// <summary>Type of memory associated with the channel</summary>
-			public enum ChannelType : byte
+			public enum ChannelType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5105,7 +5081,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type38
 		{
 			/// <summary>Baseboard Management Controller (BMC) interface type</summary>
-			public enum BmcInterfaceType : byte
+			public enum BmcInterfaceType : Byte
 			{
 				/// <summary>Unknown</summary>
 				Unknown = 0x00,
@@ -5193,7 +5169,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type39
 		{
 			/// <summary>Power supply type</summary>
-			public enum DmtfPowerType : byte
+			public enum DmtfPowerType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5213,7 +5189,7 @@ namespace AlphaOmega.Debug.Native
 				Regulator = 0x08,
 			}
 			/// <summary>DMTF Input Voltage Range Switching</summary>
-			public enum DmtfInputVoltageType : byte
+			public enum DmtfInputVoltageType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5230,7 +5206,7 @@ namespace AlphaOmega.Debug.Native
 			}
 
 			/// <summary>Power supply status</summary>
-			public enum StatusType : byte
+			public enum StatusType : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5335,17 +5311,17 @@ namespace AlphaOmega.Debug.Native
 			/// </remarks>
 			public UInt16 InputCurrentProbeHandle;
 			/// <summary>Power supply is hot-replaceable</summary>
-			public Boolean PowerSupplyIsHotReplaceable { get { return (this.PowerSupplyCharacteristics >> 0 & 0x01) == 0x01; } }
+			public Boolean PowerSupplyIsHotReplaceable => (this.PowerSupplyCharacteristics & 0x01) == 0x01;
 			/// <summary>Power supply is present</summary>
-			public Boolean PowerSupplyIsPresent { get { return (this.PowerSupplyCharacteristics >> 1 & 0x01) == 0x01; } }
+			public Boolean PowerSupplyIsPresent => ((this.PowerSupplyCharacteristics >> 1) & 0x01) == 0x01;
 			/// <summary>Power supply is unplugged from the wall</summary>
-			public Boolean PowerSupplyIsUnplugged { get { return (this.PowerSupplyCharacteristics >> 2 & 0x01) == 0x01; } }
+			public Boolean PowerSupplyIsUnplugged => ((this.PowerSupplyCharacteristics >> 2) & 0x01) == 0x01;
 			/// <summary>DMTF Input Voltage Range Switching</summary>
-			public DmtfInputVoltageType PowerSupplyVoltageSwitch { get { return (DmtfInputVoltageType)(this.PowerSupplyCharacteristics >> 3 & 0xf); } }
+			public DmtfInputVoltageType PowerSupplyVoltageSwitch => (DmtfInputVoltageType)(this.PowerSupplyCharacteristics >> 3 & 0xf);
 			/// <summary>Power supply status</summary>
-			public StatusType PowerSupplyStatus { get { return (StatusType)(this.PowerSupplyCharacteristics >> 7 & 0x7); } }
+			public StatusType PowerSupplyStatus => (StatusType)(this.PowerSupplyCharacteristics >> 7 & 0x7);
 			/// <summary>Power supply type</summary>
-			public DmtfPowerType PowerSupplyType { get { return (DmtfPowerType)(this.PowerSupplyCharacteristics >> 10 & 0xf); } }
+			public DmtfPowerType PowerSupplyType => (DmtfPowerType)(this.PowerSupplyCharacteristics >> 10 & 0xf);
 		}
 
 		/// <summary>Additional Information (Type 40)</summary>
@@ -5393,7 +5369,7 @@ namespace AlphaOmega.Debug.Native
 		public struct Type41
 		{
 			/// <summary>Device type</summary>
-			public enum Device : byte
+			public enum Device : Byte
 			{
 				/// <summary>Other</summary>
 				Other = 0x01,
@@ -5467,16 +5443,16 @@ namespace AlphaOmega.Debug.Native
 			private Byte DeviceAndFunctionNumber;
 
 			/// <summary>Is Device enabled</summary>
-			public Boolean DeviceEnabled { get { return (this._DeviceType >> 7 & 0x01) == 1; } }
+			public Boolean DeviceEnabled => ((this._DeviceType >> 7) & 0x01) == 1;
 
 			/// <summary>Type of the device</summary>
-			public Device DeviceType { get { return (Device)(this._DeviceType >> 0 & 0x3f); } }
+			public Device DeviceType => (Device)(this._DeviceType & 0x3f);
 
 			/// <summary>Function number</summary>
-			public Byte FunctionNumber { get { return (Byte)(this.DeviceAndFunctionNumber >> 0 & 0x03); } }
+			public Byte FunctionNumber => (Byte)(this.DeviceAndFunctionNumber & 0x03);
 
 			/// <summary>Device number</summary>
-			public Byte DeviceNumber { get { return (Byte)(this.DeviceAndFunctionNumber >> 3 & 0x1f); } }
+			public Byte DeviceNumber => (Byte)((this.DeviceAndFunctionNumber >> 3) & 0x1f);
 		}
 
 		/// <summary>Management Controller Host Interface (Type 42)</summary>

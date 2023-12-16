@@ -10,8 +10,7 @@ namespace AlphaOmega.Debug.Smb
 	{
 		internal AdditionalInformation(SmBios.Type40 type40)
 			: base(type40.Header, type40)
-		{
-		}
+		{ }
 
 		/// <summary>Gets additional information</summary>
 		/// <returns></returns>
@@ -19,7 +18,7 @@ namespace AlphaOmega.Debug.Smb
 		{
 			if(base.Type.AdditionalInformationEntriesCount > 0)
 			{
-				UInt32 structSize = (UInt32)Marshal.SizeOf(typeof(SmBios.Type40.Type40_AdditionalInformation));
+				_ = (UInt32)Marshal.SizeOf(typeof(SmBios.Type40.Type40_AdditionalInformation));
 				using(PinnedBufferReader reader = new PinnedBufferReader(base.ExData))
 				{
 					UInt32 padding = 0;

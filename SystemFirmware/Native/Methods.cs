@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Native
 	public static class Methods
 	{
 		/// <summary>Identifier of the firmware table provider</summary>
-		public enum FirmwareTableType : uint
+		public enum FirmwareTableType : UInt32
 		{
 			/// <summary>The ACPI firmware table provider</summary>
 			Acpi = 0x41435049,

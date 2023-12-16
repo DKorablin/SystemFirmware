@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class ManagementDeviceComponent : TypeBaseT<SmBios.Type35>
 	{
 		/// <summary>Description</summary>
-		public String Description { get { return base.GetString(base.Type.Description); } }
+		public String Description => base.GetString(base.Type.Description);
 
 		internal ManagementDeviceComponent(SmBios.Type35 type35)
 			: base(type35.Header, type35)
-		{
-		}
+		{ }
 	}
 }

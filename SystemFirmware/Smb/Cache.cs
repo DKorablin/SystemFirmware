@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class Cache : TypeBaseT<SmBios.Type7>
 	{
 		/// <summary>Socket designation</summary>
-		public String SocketDesignation { get { return base.GetString(base.Type.SocketDesignation); } }
+		public String SocketDesignation => base.GetString(base.Type.SocketDesignation);
 
 		internal Cache(SmBios.Type7 type7)
 			: base(type7.Header,type7)
-		{
-		}
+		{ }
 	}
 }

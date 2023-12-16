@@ -11,9 +11,6 @@ namespace AlphaOmega.Debug.Smb
 
 		internal TypeBaseT(SmBios.Header header, T type)
 			: base(header)
-		{
-			this.Type = type;
-			//Utils.ClearOverflowFields(base.Header, ref this._type);
-		}
+			=> this.Type = type;// Utils.ClearOverflowFields(base.Header, ref this._type)
 	}
 }

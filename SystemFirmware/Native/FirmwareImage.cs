@@ -43,8 +43,8 @@ namespace AlphaOmega.Debug.Native
 			public Byte IndicatorByte;//Last image=80
 			public UInt16 Reserved;
 
-			public Boolean IsValid { get { return BitConverter.ToInt32(this.signature, 0) == PCIR_Signature; } }
-			public String SignatureStr { get { return Encoding.ASCII.GetString(this.signature); } }
+			public Boolean IsValid => BitConverter.ToInt32(this.signature, 0) == PCIR_Signature;
+			public String SignatureStr => Encoding.ASCII.GetString(this.signature);
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -64,8 +64,8 @@ namespace AlphaOmega.Debug.Native
 			public UInt32[] aim_offset;
 
 
-			public Boolean IsValid { get { return BitConverter.ToInt32(this.signature, 0) == VBT_Signature; } }
-			public String SignatureStr { get { return Encoding.ASCII.GetString(this.signature); } }
+			public Boolean IsValid => BitConverter.ToInt32(this.signature, 0) == VBT_Signature;
+			public String SignatureStr => Encoding.ASCII.GetString(this.signature);
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -81,8 +81,8 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>size of this structure and all data blocks</summary>
 			public UInt16 bdb_size;
 
-			public Boolean IsValid { get { return BDB_Signature.SequenceEqual(this.signature); } }
-			public String SignatureStr { get { return Encoding.ASCII.GetString(this.signature); } }
+			public Boolean IsValid => BDB_Signature.SequenceEqual(this.signature);
+			public String SignatureStr => Encoding.ASCII.GetString(this.signature);
 		}
 	}
 }

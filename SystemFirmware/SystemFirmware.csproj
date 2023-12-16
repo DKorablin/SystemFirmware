@@ -24,4 +24,10 @@
 			<Link>PinnedBufferReader.cs</Link>
 		</Compile>
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
 </Project>

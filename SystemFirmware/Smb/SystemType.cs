@@ -7,22 +7,20 @@ namespace AlphaOmega.Debug.Smb
 	public class SystemType : TypeBaseT<SmBios.Type1>
 	{
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer { get { return base.GetString(base.Type.Manufacturer); } }
+		public String Manufacturer => base.GetString(base.Type.Manufacturer);
 		/// <summary>Product name</summary>
-		public String ProductName { get { return base.GetString(base.Type.ProductName); } }
+		public String ProductName => base.GetString(base.Type.ProductName);
 		/// <summary>Version</summary>
-		public String Version { get { return base.GetString(base.Type.Version); } }
+		public String Version => base.GetString(base.Type.Version);
 		/// <summary>Serial number</summary>
-		public String SerialNumber { get { return base.GetString(base.Type.SerialNumber); } }
+		public String SerialNumber => base.GetString(base.Type.SerialNumber);
 		/// <summary>SKU Number</summary>
-		public String SKUNumber { get { return base.GetString(base.Type.SKUNumber); } }
+		public String SKUNumber => base.GetString(base.Type.SKUNumber);
 		/// <summary>Family</summary>
-		public String Family { get { return base.GetString(base.Type.Family); } }
+		public String Family => base.GetString(base.Type.Family);
 
 		internal SystemType(SmBios.Type1 data)
 			: base(data.Header, data)
-		{
-			
-		}
+		{ }
 	}
 }

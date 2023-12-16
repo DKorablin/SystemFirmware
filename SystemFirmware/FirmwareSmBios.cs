@@ -198,7 +198,7 @@ namespace AlphaOmega.Debug
 						}
 
 						//Двигаемся в начало массива строк
-						padding = padding + header.Length;
+						padding += header.Length;
 
 						//В разных версиях - разный размер структур
 						if(structPadding < padding)

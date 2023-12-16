@@ -7,11 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class VoltageProbe : TypeBaseT<SmBios.Type26>
 	{
 		/// <summary>Description</summary>
-		public String Description { get { return base.GetString(base.Type.Description); } }
+		public String Description => base.GetString(base.Type.Description);
 
 		internal VoltageProbe(SmBios.Type26 type26)
 			: base(type26.Header, type26)
-		{
-		}
+		{ }
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaOmega.Debug.Native;
+﻿using AlphaOmega.Debug.Native;
 
 namespace AlphaOmega.Debug.Smb
 {
@@ -8,7 +7,6 @@ namespace AlphaOmega.Debug.Smb
 	{
 		internal MemoryModule(SmBios.Type6 type6)
 			: base(type6.Header, type6)
-		{
-		}
+		{ }
 	}
 }

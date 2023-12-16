@@ -20,8 +20,7 @@ namespace AlphaOmega.Debug.Smb
 
 		internal OnBoardDevices(SmBios.Type10 type10)
 			: base(type10.Header, type10)
-		{
-		}
+		{ }
 
 		/// <summary>On board devices</summary>
 		/// <returns>List on on board devices</returns>

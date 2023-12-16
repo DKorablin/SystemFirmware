@@ -7,17 +7,16 @@ namespace AlphaOmega.Debug.Smb
 	public class Bios : TypeBaseT<SmBios.Type0>
 	{
 		/// <summary>BIOS Vendor</summary>
-		public String Vendor { get { return base.GetString(base.Type.Vendor); } }
+		public String Vendor => base.GetString(base.Type.Vendor);
 		/// <summary>BIOS version</summary>
-		public String Version { get { return base.GetString(base.Type.Version); } }
+		public String Version => base.GetString(base.Type.Version);
 		/// <summary>BIOS release data</summary>
-		public String ReleaseDate { get { return base.GetString(base.Type.ReleaseDate); } }
+		public String ReleaseDate => base.GetString(base.Type.ReleaseDate);
 		/// <summary>BIOS ROM Size</summary>
-		public String RomSize { get { return $"{base.Type.RomSize:N0} {base.Type.RomSizeUnits}"; } }
+		public String RomSize => $"{base.Type.RomSize:N0} {base.Type.RomSizeUnits}";
 
 		internal Bios(SmBios.Type0 data)
 			: base(data.Header, data)
-		{
-		}
+		{ }
 	}
 }

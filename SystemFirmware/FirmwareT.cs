@@ -8,12 +8,14 @@ namespace AlphaOmega.Debug
 {
 	/// <summary>Base firmware typed facade</summary>
 	/// <typeparam name="T">Type of required firmware</typeparam>
-	public class FirmwareT<T> : Firmware where T : FirmwareTable,new()
+	public class FirmwareT<T> : Firmware where T : FirmwareTable, new()
 	{
 		private readonly Dictionary<UInt32, Byte[]> _storage;
 
 		/// <summary>Creates instance of base firmware with previosly collected data</summary>
 		/// <param name="data">Full payload with all tables</param>
+		/// <exception cref="ArgumentNullException"><c>data</c> is empty or null</exception>
+		/// <exception cref="InvalidOperationException">Invalid signature or invalid type</exception>
 		public FirmwareT(Byte[] data)
 			: base(GetTable<T>())
 		{
@@ -26,18 +28,18 @@ namespace AlphaOmega.Debug
 				FWStructs.Header header = reader.BytesToStructure<FWStructs.Header>(ref padding);
 				if(!header.IsValid)
 				{
-					Exception exc = new ArgumentException("Invalid signature", nameof(header.IsValid));
+					Exception exc = new InvalidOperationException("Invalid signature");
 					exc.Data.Add("Header", header.SignatureStr);
 					throw exc;
 				}
 				if(header.Type != base.TableType)
 				{
-					Exception exc = new ArgumentException("Invalid type", nameof(header.Type));
+					Exception exc = new InvalidOperationException("Invalid type");
 					exc.Data.Add("Type", header.Type);
 					throw exc;
 				}
 				if(header.Count == 0)
-					throw new ArgumentException("No data", nameof(header.Count));
+					throw new InvalidOperationException("No data");
 
 				this._storage = new Dictionary<UInt32, Byte[]>();
 				for(UInt32 loop = 0; loop < header.Count; loop++)
@@ -54,8 +56,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Creates instance of base firmware typed facade</summary>
 		public FirmwareT()
 			: base(GetTable<T>())
-		{
-		}
+		{ }
 
 		/// <summary>Save loaded data to Byte[] for future examination</summary>
 		/// <returns>Byte[] with custom header</returns>
@@ -86,21 +87,17 @@ namespace AlphaOmega.Debug
 		/// <summary>Loads all firmware tables from Win32 API or loads from local storage</summary>
 		/// <returns>ID's of known firmware tables</returns>
 		public override IEnumerable<UInt32> EnumFirmwareTables()
-		{
-			return this._storage == null
+			=> this._storage == null
 				? base.EnumFirmwareTables()
 				: this._storage.Keys;
-		}
 
 		/// <summary>Gets all data from Win32 API or from local storage table by ID</summary>
 		/// <param name="firmwareTableID">Firmware table ID</param>
 		/// <returns>Payload</returns>
 		public override Byte[] GetSystemFirmwareTable(UInt32 firmwareTableID = 0)
-		{
-			return this._storage == null
+			=> this._storage == null
 				? base.GetSystemFirmwareTable(firmwareTableID)
 				: this._storage[firmwareTableID];
-		}
 
 		/// <summary>Load firmware data from memory or from Win32 API function(s)</summary>
 		/// <returns>Firmware tables</returns>

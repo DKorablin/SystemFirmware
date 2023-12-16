@@ -8,7 +8,6 @@ namespace AlphaOmega.Debug.Smb
 	{
 		internal MemoryController(SmBios.Type5 type5)
 			: base(type5.Header, type5)
-		{
-		}
+		{ }
 	}
 }

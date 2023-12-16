@@ -14,8 +14,9 @@ namespace AlphaOmega.Debug
 			public Int32 Signature;
 			public Methods.FirmwareTableType Type;
 			public UInt16 Count;
-			public String SignatureStr { get { return Encoding.ASCII.GetString(BitConverter.GetBytes(this.Signature)); } }
-			public Boolean IsValid { get { return this.Signature == Header.SyFW; } }
+			public String SignatureStr => Encoding.ASCII.GetString(BitConverter.GetBytes(this.Signature));
+			public Boolean IsValid => this.Signature == Header.SyFW;
+
 			public Header(Methods.FirmwareTableType type, UInt16 count)
 			{
 				Signature = Header.SyFW;
@@ -29,6 +30,7 @@ namespace AlphaOmega.Debug
 		{
 			public UInt32 TableId;
 			public UInt32 Size;
+
 			public Table(UInt32 tableId, UInt32 size)
 			{
 				this.TableId = tableId;
