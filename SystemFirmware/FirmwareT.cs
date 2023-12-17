@@ -29,13 +29,13 @@ namespace AlphaOmega.Debug
 				if(!header.IsValid)
 				{
 					Exception exc = new InvalidOperationException("Invalid signature");
-					exc.Data.Add("Header", header.SignatureStr);
+					exc.Data.Add(nameof(header.SignatureStr), header.SignatureStr);
 					throw exc;
 				}
 				if(header.Type != base.TableType)
 				{
 					Exception exc = new InvalidOperationException("Invalid type");
-					exc.Data.Add("Type", header.Type);
+					exc.Data.Add(nameof(header.Type), header.Type);
 					throw exc;
 				}
 				if(header.Count == 0)
@@ -67,6 +67,8 @@ namespace AlphaOmega.Debug
 				UInt32[] tableIDs = this.EnumFirmwareTables()
 					.Distinct()//TODO: Win32 API функция возвращает одинаковые ID'шники для ACPI????
 					.ToArray();
+				if(tableIDs.Length == 0)
+					return new Byte[] { };
 
 				FWStructs.Header header = new FWStructs.Header(base.TableType, (UInt16)tableIDs.Length);
 				Byte[] bHeader = Utils.ConvertToBytes(header);

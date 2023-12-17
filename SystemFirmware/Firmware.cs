@@ -24,7 +24,19 @@ namespace AlphaOmega.Debug
 		{
 			UInt32 dataSize = Methods.EnumSystemFirmwareTables(this.TableType, IntPtr.Zero, 0);
 			if(dataSize == 0)
-				throw new Win32Exception();
+			{
+				switch((UInt32)Marshal.GetHRForLastWin32Error())
+				{
+				case 0x80070001://Incorrect function
+					if(this.TableType == Methods.FirmwareTableType.Firm)
+						throw new NotSupportedException("Not supported for UEFI systems; use 'RSMB' instead.");
+					else goto default;
+				case 0x80070000://The operation completed succesfully
+					yield break;
+				default:
+					throw new Win32Exception();
+				}
+			}
 
 			Byte[] payload = new Byte[dataSize];
 			IntPtr hBuffer = Marshal.AllocHGlobal((Int32)dataSize);

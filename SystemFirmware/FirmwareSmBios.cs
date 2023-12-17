@@ -88,6 +88,8 @@ namespace AlphaOmega.Debug
 			{ SmBios.Type.SystemPowerSupply, new TypeBase.TypeMapping(typeof(SystemPowerSupply)) },
 			{ SmBios.Type.AdditionalInformation, new TypeBase.TypeMapping(typeof(AdditionalInformation)) },
 			{ SmBios.Type.OnboardDevicesExtended, new TypeBase.TypeMapping(typeof(OnboardDevicesExtended)) },
+
+			{ SmBios.Type.TpmDevice, new TypeBase.TypeMapping(typeof(TpmDevice)) },
 		};
 
 		private void Parse()
@@ -182,6 +184,10 @@ namespace AlphaOmega.Debug
 						case SmBios.Type.ManagementControllerHostInterface:
 							SmBios.Type42 type42 = reader.BytesToStructure<SmBios.Type42>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type42>(header, type42);
+							break;
+						case SmBios.Type.TpmDevice:
+							SmBios.Type43 type43 = reader.BytesToStructure<SmBios.Type43>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type43>(header, type43);
 							break;
 						case SmBios.Type.EoT:
 							if(header.Length == 4)

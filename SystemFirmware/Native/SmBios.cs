@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AlphaOmega.Debug.Native
 {
@@ -5482,6 +5483,68 @@ namespace AlphaOmega.Debug.Native
 			/// <remarks>Management Controller Host Interface Data as specified by the Interface Type</remarks>
 			public Byte InterfaceTypeSpecificDataLength;
 			//TODO: Varable length array follows
+		}
+
+		/// <summary>Trusted Platform Module Device (Type 43)</summary>
+		/// <remarks>
+		/// Trusted Platform Module (TPM) is an international standard for a secure cryptoprocessor, a dedicated microcontroller designed to secure hardware through integrated cryptographic keys.
+		/// The term can also refer to a chip conforming to the standard ISO/IEC 11889.
+		/// </remarks>
+		[StructLayout(LayoutKind.Sequential,Pack =1)]
+		public struct Type43
+		{
+			/// <summary>TPM Device Characteristics</summary>
+			[Flags]
+			public enum CharacteristicsType : UInt64
+			{
+				/// <summary>Reserved</summary>
+				Reserved0 = 1L << 0,
+				/// <summary>Reserved</summary>
+				Reserved1 = 1L << 1,
+				/// <summary>TPM Device Characteristics are not supported</summary>
+				NotSupported = 1L << 2,
+				/// <summary>Family configurable via firmware update; for example, switching between TPM 1.2 and TPM 2.0.</summary>
+				FirmwareUpdate = 1L << 3,
+				/// <summary>Family configurable via platform software support, such as BIOS Setup; for example, switching between TPM 1.2 and TPM 2.0</summary>
+				PlatformSoftwareSupport = 1L << 4,
+				/// <summary>Family configurable via OEM proprietary mechanism; for example, switching between TPM 1.2 and TPM 2.0</summary>
+				ProprietaryMechanism = 1L << 5,
+			}
+
+			/// <summary>SMBIOS type header</summary>
+			public Header Header;
+			
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+			private Byte[] _VendorID;
+			/// <summary>Major TPM version supported by the TPM device</summary>
+			/// <example>The value is 01h for TPM v1.2 and is 02h for TPM v2.0.</example>
+			public Byte MajorSpecVersion;
+			/// <summary>Minor TPM version supported by the TPM device</summary>
+			/// <example>The value is 02h for TPM v1.2 and is 00h for TPM v2.0</example>
+			public Byte MinorSpecVersion;
+			/// <summary>
+			/// For Major Spec Version 01h, this field contains the TPM_VERSION structure defined in the TPM Main Specification, Part 2, Section 5.3.
+			/// For Major Spec Version 02h, this field contains the most significant 32 bits of a TPM vendor-specific value for firmware version(see TPM_PT_FIRMWARE_VERSION_1 in TPM Structures specification).
+			/// </summary>
+			public UInt32 FirmwareVersion1;
+			/// <summary>
+			/// For Major Spec Version 01h, this field contains 00h.
+			/// For Major Spec Version 02h, this field contains the least significant 32 bits of a TPM vendor-specific value for firmware version(see TPM_PT_FIRMWARE_VERSION_2 in TPM Structures specification).
+			/// </summary>
+			public UInt32 FirmwareVersion2;
+			/// <summary>String number of descriptive information of the TPM device</summary>
+			public Byte Description;
+			/// <summary>TPM device characteristics information (see 7.44.1)</summary>
+			public CharacteristicsType Characteristics;
+			/// <summary>OEM- or BIOS vendor-specific information</summary>
+			public UInt32 OemDefined;
+
+			/// <summary>Specified as four ASCII characters, as defined by TCG Vendor ID(see CAP_VID in TCG Vendor ID Registry)</summary>
+			/// <example>
+			/// Vendor ID string of "ABC" = (41 42 43 00)
+			/// Vendor ID string of "ABCD" = (41 42 43 44)
+			/// </example>
+			public String VendorID => Encoding.ASCII.GetString(this._VendorID);
 		}
 	}
 }

@@ -49,7 +49,7 @@ Supported SMBIOS Types:
 - Additional Information (Type 40)
 - Onboard Devices Extended Information (Type 41)
 - Management Controller Host Interface (Type 42) _[Not supported]_
-- TPM Device (Type 43) _[Not supported]_
+- TPM Device (Type 43)
 - Processor Additional Information (Type 44) _[Not supported]_
 
 Example how to read SMBIOS Type 2 (Baseboard) and Type 8 (Port Connector) information:

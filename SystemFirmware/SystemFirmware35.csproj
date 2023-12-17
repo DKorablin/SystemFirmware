@@ -77,6 +77,7 @@
     <Compile Include="Smb\SystemPowerSupply.cs" />
     <Compile Include="Smb\SystemSlots.cs" />
     <Compile Include="Smb\TemperatureProbe.cs" />
+    <Compile Include="Smb\TpmDevice.cs" />
     <Compile Include="Smb\TypeBase.cs" />
     <Compile Include="Smb\TypeBaseT.cs" />
     <Compile Include="Smb\Bios.cs" />

@@ -34,34 +34,48 @@ namespace Demo
 			}
 
 			FirmwareT<FirmwareFirm> firm = new FirmwareT<FirmwareFirm>();
-			fileName = Path.Combine(Environment.CurrentDirectory, baseboard1.Product + "_" + baseboard1.SerialNumber + "_firm.sfw");
+				fileName = Path.Combine(Environment.CurrentDirectory, baseboard1.Product + "_" + baseboard1.SerialNumber + "_firm.sfw");
 			if(!File.Exists(fileName))
-				File.WriteAllBytes(fileName, firm.Save());
-
-			firm = new FirmwareT<FirmwareFirm>(File.ReadAllBytes(fileName));
-			foreach(FirmwareFirm table in firm.GetData())
 			{
-				#region Firmware parsing test (Failed)
-				if(table.TableId == 786432 && baseboard1.Product == "P8H61-M PRO")
+				try
 				{
-					using(PinnedBufferReader reader = new PinnedBufferReader(table.Data))
-					{
-						UInt32 padding = 0;
-						FirmwareImage.FFS_FILE_HEADER vesaHdr = reader.BytesToStructure<FirmwareImage.FFS_FILE_HEADER>(ref padding);
-
-						const UInt32 pceStartOffset = 0x00000040;
-						padding = pceStartOffset;
-						FirmwareImage.Pcir_header pceExp = reader.BytesToStructure<FirmwareImage.Pcir_header>(ref padding);
-
-						const UInt32 vbtStartOffset = 0x00000ac0;
-						padding = vbtStartOffset;
-						FirmwareImage.vbt_header vtbHeader = reader.BytesToStructure<FirmwareImage.vbt_header>(ref padding);
-						padding = vbtStartOffset + vtbHeader.bdb_offset;
-						FirmwareImage.bdb_header bdbHeader = reader.BytesToStructure<FirmwareImage.bdb_header>(ref padding);
-					}
+					Byte[] payload = firm.Save();
+					if(payload.Length > 0)
+						File.WriteAllBytes(fileName, firm.Save());
+				}catch(NotSupportedException exc)
+				{
+					Console.WriteLine(exc.Message);
 				}
-				#endregion Firmware parsing test (Failed)
 			}
+
+			if(File.Exists(fileName))
+			{
+				firm = new FirmwareT<FirmwareFirm>(File.ReadAllBytes(fileName));
+				foreach(FirmwareFirm table in firm.GetData())
+				{
+					#region Firmware parsing test (Failed)
+					if(table.TableId == 786432 && baseboard1.Product == "P8H61-M PRO")
+					{
+						using(PinnedBufferReader reader = new PinnedBufferReader(table.Data))
+						{
+							UInt32 padding = 0;
+							FirmwareImage.FFS_FILE_HEADER vesaHdr = reader.BytesToStructure<FirmwareImage.FFS_FILE_HEADER>(ref padding);
+
+							const UInt32 pceStartOffset = 0x00000040;
+							padding = pceStartOffset;
+							FirmwareImage.Pcir_header pceExp = reader.BytesToStructure<FirmwareImage.Pcir_header>(ref padding);
+
+							const UInt32 vbtStartOffset = 0x00000ac0;
+							padding = vbtStartOffset;
+							FirmwareImage.vbt_header vtbHeader = reader.BytesToStructure<FirmwareImage.vbt_header>(ref padding);
+							padding = vbtStartOffset + vtbHeader.bdb_offset;
+							FirmwareImage.bdb_header bdbHeader = reader.BytesToStructure<FirmwareImage.bdb_header>(ref padding);
+						}
+					}
+					#endregion Firmware parsing test (Failed)
+				}
+			}
+
 			Console.WriteLine(">>>Dump path: {0}", Environment.CurrentDirectory);
 
 			foreach(String filePath in Directory.GetFiles(Environment.CurrentDirectory, "*_smb.sfw", SearchOption.TopDirectoryOnly))
@@ -213,6 +227,11 @@ namespace Demo
 						OnboardDevicesExtended type41 = (OnboardDevicesExtended)type;
 						Utils.ConsoleWriteMembers(type.Header.Type.ToString(), type41);
 						Utils.ConsoleWriteMembers(type41.Type);
+						break;
+					case SmBios.Type.TpmDevice:
+						TpmDevice type43 = (TpmDevice)type;
+						Utils.ConsoleWriteMembers(type.Header.Type.ToString(), type43);
+						Utils.ConsoleWriteMembers(type43.Type);
 						break;
 					default:
 #if DEBUG

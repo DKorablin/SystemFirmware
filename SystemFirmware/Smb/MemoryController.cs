@@ -1,5 +1,4 @@
-﻿using System;
-using AlphaOmega.Debug.Native;
+﻿using AlphaOmega.Debug.Native;
 
 namespace AlphaOmega.Debug.Smb
 {
