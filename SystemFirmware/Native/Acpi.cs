@@ -332,21 +332,94 @@ namespace AlphaOmega.Debug.Native
 				SohoServer = 5,
 				AplliancePC = 6,
 				PerformanceServer = 7,
+				Tabled = 8,
 			}
 
-			/// <summary>This is a 32-bit pointer to the FACS</summary>
+			/// <summary>Masks for FADT Boot Architecture Flags (boot_flags) [Vx]=Introduced in this FADT revision</summary>
+			[Flags]
+			public enum BootArchitectureFlags : UInt16
+			{
+				/// <summary>[V2] System has LPC or ISA bus devices</summary>
+				LEGACY_DEVICES = 1<<0,
+				/// <summary>[V3] System has an 8042 controller on port 60/64</summary>
+				_8042 = 1<<1,
+				/// <summary>[V4] It is not safe to probe for VGA hardware</summary>
+				NO_VGA = 1<<2,
+				/// <summary>[V4] Message Signaled Interrupts (MSI) must not be enabled</summary>
+				NO_MSI = 1<<3,
+				/// <summary>[V4] PCIe ASPM control must not be enabled</summary>
+				NO_ASPM = 1<<4,
+				/// <summary>[V5] No CMOS real-time clock present</summary>
+				NO_CMOS_RTC = 1<<5,
+			}
+
+			/// <summary>Masks for FADT flags</summary>
+			[Flags]
+			public enum FadtFlags : UInt32
+			{
+				/// <summary>[V1] The WBINVD instruction works properly</summary>
+				WBINVD = 1<<0,
+				/// <summary>[V1] WBINVD flushes but does not invalidate caches</summary>
+				WBINVD_FLUSH = 1<<1,
+				/// <summary>[V1] All processors support C1 state</summary>
+				C1_SUPPORTED = 1<<2,
+				/// <summary>[V1] C2 state works on MP system</summary>
+				C2_MP_SUPPORTED = 1<<3,
+				/// <summary>[V1] Power button is handled as a control method device</summary>
+				POWER_BUTTON = 1<<4,
+				/// <summary>[V1] Sleep button is handled as a control method device</summary>
+				SLEEP_BUTTON = 1<<5,
+				/// <summary>[V1] RTC wakeup status is not in fixed register space</summary>
+				FIXED_RTC = 1<<6,
+				/// <summary>[V1] RTC alarm can wake system from S4</summary>
+				S4_RTC_WAKE = 1<<7,
+				/// <summary>[V1] ACPI timer width is 32-bit (0=24-bit)</summary>
+				_32BIT_TIMER = 1<<8,
+				/// <summary>[V1] Docking supported</summary>
+				DOCKING_SUPPORTED = 1<<9,
+				/// <summary>[V2] System reset via the FADT RESET_REG supported</summary>
+				RESET_REGISTER = 1<<10,
+				/// <summary>[V3] No internal expansion capabilities and case is sealed</summary>
+				SEALED_CASE = 1<<11,
+				/// <summary>[V3] No local video capabilities or local input devices</summary>
+				HEADLESS = 1<<12,
+				/// <summary>[V3] Must execute native instruction after writing SLP_TYPx register</summary>
+				SLEEP_TYPE = 1<<13,
+				/// <summary>[V4] System supports PCIEXP_WAKE (STS/EN) bits (ACPI 3.0)</summary>
+				PCI_EXPRESS_WAKE = 1<<14,
+				/// <summary>[V4] OSPM should use platform-provided timer (ACPI 3.0)</summary>
+				PLATFORM_CLOCK = 1<<15,
+				/// <summary>[V4] Contents of RTC_STS valid after S4 wake (ACPI 3.0)</summary>
+				S4_RTC_VALID = 1<<16,
+				/// <summary>[V4] System is compatible with remote power on (ACPI 3.0)</summary>
+				REMOTE_POWER_ON = 1<<17,
+				/// <summary>[V4] All local APICs must use cluster model (ACPI 3.0)</summary>
+				APIC_CLUSTER = 1<<18,
+				/// <summary>[V4] All local xAPICs must use physical dest mode (ACPI 3.0)</summary>
+				APIC_PHYSICAL = 1<<19,
+				/// <summary>[V5] ACPI hardware is not implemented (ACPI 5.0)</summary>
+				HW_REDUCED = 1<<20,
+				/// <summary>[V5] S0 power savings are equal or better than S3 (ACPI 5.0)</summary>
+				LOW_POWER_S0 = 1<<21, 
+			}
+
+			/// <summary>Physical memory address of the FACS, where OSPM and Firmware exchange control information.</summary>
 			/// <remarks>
 			/// Since ACPI 2.0 a new field has been added to the table, <see cref="X_FirmwareControl"/> of type GAS, which is 64-bits wide.
 			/// Only one of the two fields is used, the other contains 0.
 			/// According to the Specs, the <see cref="X_FirmwareControl"/> is used only when the FACS is placed above the 4th GB.
 			/// </remarks>
 			public UInt32 FirmwareCtrl;
-			/// <summary>32-bit physical address of DSDT</summary>
-			/// <remarks>This has a <see cref="X_Dsdt"/> brother too.</remarks>
+			/// <summary>Physical memory address of the DSDT.</summary>
+			/// <remarks>If the <see cref="X_Dsdt"/> field contains a non-zero value which can be used by the OSPM, then this field must be ignored by the OSPM.</remarks>
 			public UInt32 Dsdt;
-			/// <summary>System Interrupt Model (ACPI 1.0) - not used in ACPI 2.0+</summary>
+			/// <summary>ACPI 1.0 defined this offset as a field named INT_MODEL, which was eliminated in ACPI 2.0.</summary>
+			/// <remarks>Platforms should set this field to zero but field values of one are also allowed to maintain compatibility with ACPI 1.0.</remarks>
 			public Byte model;
-			/// <summary>This field contains a value which should address you to a power management profile</summary>
+			/// <summary>
+			/// This field is set by the OEM to convey the preferred power management profile to OSPM.
+			/// OSPM can use this field to set default power management policy parameters during OS installation.
+			/// </summary>
 			/// <remarks>For example if it contains 2, the computer is a laptop and you should configure power management in power saving mode.</remarks>
 			public PreferredPowerManagementType PreferredPowerManagementProfile;
 			/// <summary>The System Control Interrupt is used by ACPI to notify the OS about fixed events, such as for example, pressing the power button, or for General Purpose Events (GPEs), which are firmware specific</summary>
@@ -355,79 +428,176 @@ namespace AlphaOmega.Debug.Native
 			/// To know if it's a PIC IRQ, check if the dual 8259 interrupt controllers are present via the MADT.
 			/// Otherwise, it's a GSI.
 			/// If you are using the IOAPIC and the PIC is present, remember to check the Interrupt Source Overrides first to get the GSI associated with the IRQ source.
+			/// On systems that do not contain the 8259, this field contains the Global System interrupt number of the SCI interrupt. OSPM is required to treat the ACPI SCI interrupt as a shareable, level, active low interrupt.
 			/// </remarks>
 			public UInt16 SCI_Interrupt;
-			/// <summary>This is an I/O Port</summary>
+			/// <summary>
+			/// System port address of the SMI Command Port.
+			/// During ACPI OS initialization, OSPM can determine that the ACPI hardware registers are owned by SMI (by way of the SCI_EN bit), in which case the ACPI OS issues the ACPI_ENABLE command to the SMI_CMD port.
+			/// The SCI_EN bit effectively tracks the ownership of the ACPI hardware registers.
+			/// OSPM issues commands to the SMI_CMD port synchronously from the boot processor.</summary>
 			/// <remarks>
 			/// This is where the OS writes AcpiEnable or AcpiDisable to get or release the ownership over the ACPI registers.
-			/// This is 0 on systems where the System Management Mode is not supported.
+			/// This field is reserved and must be zero on system that does not support System Management mode.
 			/// </remarks>
 			public UInt32 SMI_CommandPort;
-			/// <summary>Value to write to SMI_CMD to enable ACPI</summary>
+			/// <summary>
+			/// The value to write to SMI_CMD to disable SMI ownership of the ACPI hardware registers.
+			/// The last action SMI does to relinquish ownership is to set the SCI_EN bit.
+			/// </summary>
+			/// <remarks>
+			/// During the OS initialization process, OSPM will synchronously wait for the ntransfer of SMI ownership to complete, so the ACPI system releases SMI ownership as quickly as possible.
+			/// This field is reserved and must be zero on systems that do not support Legacy Mode.
+			/// </remarks>
 			public Byte AcpiEnable;
-			/// <summary>Value to write to SMI_CMD to disable ACPI</summary>
+			/// <summary>The value to write to SMI_CMD to re-enable SMI ownership of the ACPI hardware registers.</summary>
+			/// <remarks>
+			/// This can only be done when ownership was originally acquired from SMI by OSPM using ACPI_ENABLE.
+			/// An OS can hand ownership back to SMI by relinquishing use to the ACPI hardware registers, masking off all SCI interrupts, clearing the SCI_EN bit and then writing ACPI_DISABLE to the SMI_CMD port from the boot processor.
+			/// This field is reserved and must be zero on systems that do not support Legacy Mode.
+			/// </remarks>
 			public Byte AcpiDisable;
 			/// <summary>Value to write to SMI_CMD to enter S4BIOS state</summary>
+			/// <remarks>
+			/// The S4BIOS state provides an alternate way to enter the S4 state where the firmware saves and restores the memory context.
+			/// A value of zero in S4BIOS_F indicates S4BIOS_REQ is not supported.
+			/// </remarks>
 			public Byte S4BIOS_REQ;
-			/// <summary>Processor performance state control</summary>
+			/// <summary>If non-zero, this field contains the value OSPM writes to the SMI_CMD register to assume processor performance state control responsibility.</summary>
 			public Byte PSTATE_Control;
-			/// <summary>32-bit port address of Power Mgt 1a Event Reg Blk</summary>
+			/// <summary>System port address of the PM1a Event Register Block</summary>
+			/// <remarks>
+			/// This is a required field.
+			/// If the <see cref="X_PM1aControlBlock"/> field contains a non zero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 PM1aEventBlock;
-			/// <summary>32-bit port address of Power Mgt 1b Event Reg Blk</summary>
+			/// <summary>System port address of the PM1b Event Register Block</summary>
+			/// <remarks>
+			/// This field is optional; if this register block is not supported, this field contains zero.
+			/// If the <see cref="X_PM1bControlBlock"/> field contains a non zero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 PM1bEventBlock;
-			/// <summary>32-bit port address of Power Mgt 1a Control Reg Blk</summary>
+			/// <summary>System port address of the PM1a Control Register Block</summary>
+			/// <remarks>
+			/// This is a required field.
+			/// If the <see cref="X_PM1aControlBlock"/> field contains a non zero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 PM1aControlBlock;
-			/// <summary>32-bit port address of Power Mgt 1b Control Reg Blk</summary>
+			/// <summary>System port address of the PM1b Control Register Block</summary>
+			/// <remarks>
+			/// This field is optional; if this register block is not supported, this field contains zero.
+			/// If the <see cref="X_PM1bControlBlock"/> field contains a non zero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 PM1bControlBlock;
-			/// <summary>32-bit port address of Power Mgt 2 Control Reg Blk</summary>
+			/// <summary>System port address of the PM2 Control Register Block</summary>
+			/// <remarks>
+			/// This field is optional; if this register block is not supported, this field contains zero.
+			/// If the X_PM2_CNT_BLK field contains a non zero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 PM2ControlBlock;
-			/// <summary>32-bit port address of Power Mgt Timer Ctrl Reg Blk</summary>
+			/// <summary>System port address of the Power Management Timer Control Register Block</summary>
+			/// <remarks>
+			/// This is an optional field; if this register block is not supported, this field contains zero.
+			/// If the X_PM_TMR_BLK field contains a non-zero value which can be used by the OSPM, then this field must be ignored by the OSPM
+			/// </remarks>
 			public UInt32 PMTimerBlock;
-			/// <summary>32-bit port address of General Purpose Event 0 Reg Blk</summary>
+			/// <summary>System port address of General-Purpose Event 0 Register Block</summary>
+			/// <remarks>
+			/// If this register block is not supported, this field contains zero.
+			/// If the X_GPE0_BLK field contains a nonzero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 GPE0Block;
-			/// <summary>32-bit port address of General Purpose Event 1 Reg Blk</summary>
+			/// <summary>System port address of General-Purpose Event 1 Register Block</summary>
+			/// <remarks>
+			/// This is an optional field; if this register block is not supported, this field contains zero.
+			/// If the X_GPE1_BLK field contains a nonzero value which can be used by the OSPM, then this field must be ignored by the OSPM.
+			/// </remarks>
 			public UInt32 GPE1Block;
-			/// <summary>Byte Length of ports at pm1x_event_block</summary>
+			/// <summary>Number of bytes decoded by PM1a_EVT_BLK and, if supported, PM1b_ EVT_BLK. This value is >= 4.</summary>
 			public Byte PM1EventLength;
-			/// <summary>Byte Length of ports at pm1x_control_block</summary>
+			/// <summary>Number of bytes decoded by PM1a_CNT_BLK and, if supported, PM1b_CNT_BLK. This value is >= 2.</summary>
 			public Byte PM1ControlLength;
-			/// <summary>Byte Length of ports at pm2_control_block</summary>
+			/// <summary>Number of bytes decoded by PM2_CNT_BLK</summary>
+			/// <remarks>
+			/// Support for the PM2 register block is optional.
+			/// If supported, this value is >= 1.
+			/// If not supported, this field contains zero.
+			/// </remarks>
 			public Byte PM2ControlLength;
-			/// <summary>Byte Length of ports at pm_timer_block</summary>
+			/// <summary>Number of bytes decoded by PM_TMR_BLK</summary>
+			/// <remarks>
+			/// If the PM Timer is supported, this field’s value must be 4.
+			/// If not supported, this field contains zero.
+			/// </remarks>
 			public Byte PMTimerLength;
-			/// <summary>Byte Length of ports at gpe0_block</summary>
+			/// <summary>The length of the register whose address is given by X_GPE0_BLK (if nonzero) or by GPE0_BLK (otherwise) in bytes</summary>
+			/// <remarks>The value is a non-negative multiple of 2</remarks>
 			public Byte GPE0BlockLength;
-			/// <summary>Byte Length of ports at gpe1_block</summary>
+			/// <summary>The length of the register whose address is given by X_GPE1_BLK (if nonzero) or by GPE1_BLK (otherwise) in bytes</summary>
+			/// <remarks>The value is a non-negative multiple of 2</remarks>
 			public Byte GPE1BlockLength;
-			/// <summary>Offset in GPE number space where GPE1 events start</summary>
+			/// <summary>Offset within the ACPI general-purpose event model where GPE1 based events start</summary>
 			public Byte GPE1Base;
-			/// <summary>Support for the _CST object and C-States change notification</summary>
+			/// <summary>If non-zero, this field contains the value OSPM writes to the SMI_CMD register to indicate OS support for the _CST object and C States Changed notification</summary>
 			public Byte CStateControl;
-			/// <summary>Worst case HW latency to enter/exit C2 state</summary>
+			/// <summary>The worst-case hardware latency, in microseconds, to enter and exit a C2 state</summary>
+			/// <remarks>A value > 100 indicates the system does not support a C2 state</remarks>
 			public UInt16 WorstC2Latency;
-			/// <summary>Worst case HW latency to enter/exit C3 state</summary>
+			/// <summary>The worst-case hardware latency, in microseconds, to enter and exit a C3 state</summary>
+			/// <remarks>A value > 1000 indicates the system does not support a C3 state</remarks>
 			public UInt16 WorstC3Latency;
-			/// <summary>Processor memory cache line width, in bytes</summary>
+			/// <summary>
+			/// If WBINVD=0, the value of this field is the number of flush strides that need to be read (using cacheable addresses) to completely flush dirty lines from any processor’s memory caches.
+			/// Notice that the value in FLUSH_STRIDE is typically the smallest cache line width on any of the processor’s caches (for more information, see the FLUSH_STRIDE field definition).
+			/// If the system does not support a method for flushing the processor’s caches, then FLUSH_SIZE and WBINVD are set to zero.
+			/// Notice that this method of flushing the processor caches has limitations, and WBINVD=1 is the preferred way to flush the processors caches.
+			/// This value is typically at least 2 times the cache size.
+			/// The maximum allowed value for FLUSH_SIZE multiplied by FLUSH_STRIDE is 2 MB for a typical maximum supported cache size of 1 MB.
+			/// Larger cache sizes are supported using WBINVD=1.
+			/// This value is ignored if WBINVD=1.
+			/// This field is maintained for ACPI 1.0 processor compatibility on existing systems.
+			/// Processors in new ACPI-compatible systems are required to support the WBINVD function and indicate this to OSPM by setting the WBINVD field = 1.
+			/// </summary>
 			public UInt16 FlushSize;
-			/// <summary>Number of flush strides that need to be read</summary>
+			/// <summary>
+			/// If WBINVD=0, the value of this field is the cache line width, in bytes, of the processor’s memory caches.
+			/// This value is typically the smallest cache line width on any of the processor’s caches.
+			/// For more information, see the description of the FLUSH_SIZE field.
+			/// This value is ignored if WBINVD=1.
+			/// This field is maintained for ACPI 1.0 processor compatibility on existing systems.
+			/// Processors in new ACPI-compatible systems are required to support the WBINVD function and indicate this to OSPM by setting the WBINVD field = 1.
+			/// </summary>
 			public UInt16 FlushStride;
-			/// <summary>Processor duty cycle index in processor P_CNT reg</summary>
+			/// <summary>The zero-based index of where the processor’s duty cycle setting is within the processor’s P_CNT register</summary>
 			public Byte DutyOffset;
-			/// <summary>Processor duty cycle value bit width in P_CNT register</summary>
+			/// <summary>
+			/// The bit width of the processor’s duty cycle setting value in the P_CNT register.
+			/// Each processor’s duty cycle setting allows the software to select a nominal processor frequency below its absolute frequency as defined by: THTL_EN = 1 BF * DC/(2DUTY_WIDTH) Where: BF-Base frequency DC-Duty cycle setting When THTL_EN is 0, the processor runs at its absolute BF.
+			/// A DUTY_WIDTH value of 0 indicates that processor duty cycle is not supported and the processor continuously runs at its base frequency.
+			/// </summary>
 			public Byte DutyWidth;
-			/// <summary>Index to day-of-month alarm in RTC CMOS RAM</summary>
+			/// <summary>The RTC CMOS RAM index to the day-of-month alarm value</summary>
+			/// <remarks>
+			/// If this field contains a zero, then the RTC day of the month alarm feature is not supported.
+			/// If this field has a non-zero value, then this field contains an index into RTC RAM space that OSPM can use to program the day of the month alarm
+			/// </remarks>
 			public Byte DayAlarm;
-			/// <summary>Index to month-of-year alarm in RTC CMOS RAM</summary>
-			public Byte MonthAlarm;
+			/// <summary>The RTC CMOS RAM index to the month of year alarm value</summary>
+			/// <remarks>
+			/// If this field contains a zero, then the RTC month of the year alarm feature is not supported.
+			/// If this field has a non-zero value, then this field contains an index into RTC RAM space that OSPM can use to program the month of the year alarm.
+			/// If this feature is supported, then the DAY_ALRM feature must be supported also
+			/// </remarks>
+			public Byte MonthAlarm;//https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt
 			/// <summary>Index to century in RTC CMOS RAM</summary>
 			public Byte Century;
-			/// <summary>IA-PC Boot Architecture Flags (see below for individual flags)</summary>
+			/// <summary>IA-PC Boot Architecture Flags</summary>
 			/// <remarks>Reserved in ACPI 1.0; used since ACPI 2.0+</remarks>
-			public UInt16 BootArchitectureFlags;
+			public BootArchitectureFlags BootArchitecture;
 			/// <summary>Reserved, must be zero</summary>
 			public Byte Reserved2;
-			/// <summary>Miscellaneous flag bits (see below for individual flags)</summary>
-			public UInt32 Flags;
+			/// <summary>Miscellaneous flag bits</summary>
+			public FadtFlags Flags;
 			/// <summary>64-bit address of the Reset register</summary>
 			public acpi_generic_address ResetRegister;
 			/// <summary>Value to write to the reset_register port to reset the system</summary>
