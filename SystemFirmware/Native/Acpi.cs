@@ -58,7 +58,7 @@ namespace AlphaOmega.Debug.Native
 			PSDT = 0x54445350,
 			/// <summary>ACPI RAS Feature Table</summary>
 			RASF = 0x46534152,
-			/// <summary>Root System Description Table</summary>
+			// <summary>Root System Description Table</summary>
 			//RSDP = 0x20445352,//TODO: RSD PTR <-8 bytes
 			//OEMx = //TODO: OEM Specific tables. All table signatures starting with “OEM” are reserved for OEM use.
 			/// <summary>Root System Description Table</summary>
@@ -154,8 +154,10 @@ namespace AlphaOmega.Debug.Native
 			#endregion Reserved
 
 			#region PlatformSpecific
+			/// <summary>Banana banana banana</summary>
 			RTMA= 0x414D5452,
-			OEML= 0x4C4D454F,
+			/// <summary>Banana banana banana</summary>
+			OEML = 0x4C4D454F,
 			/// <summary>Table for Audio</summary>
 			NHLT = 0x544c484e,
 			#endregion PlatformSpecific
@@ -324,14 +326,23 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>This field contains a value which should address you to a power management profile</summary>
 			public enum PreferredPowerManagementType : Byte
 			{
+				/// <summary>Unspecified power management profile</summary>
 				Unspecified = 0,
+				/// <summary>Power management profile for desktop</summary>
 				Desktop = 1,
+				/// <summary>Power management profile for mobile</summary>
 				Mobile = 2,
+				/// <summary>Power management profile for workstation</summary>
 				Workstation = 3,
+				/// <summary>Power management profile for enterprise server</summary>
 				EnterpriseServer = 4,
+				/// <summary>Power management profile for SOHO server</summary>
 				SohoServer = 5,
+				/// <summary>Power management profile for Appliance PC</summary>
 				AplliancePC = 6,
+				/// <summary>Power management profile for performance server</summary>
 				PerformanceServer = 7,
+				/// <summary>Power management profile for tablet</summary>
 				Tabled = 8,
 			}
 
@@ -623,11 +634,11 @@ namespace AlphaOmega.Debug.Native
 			public acpi_generic_address X_PMTimerBlock;
 			/// <summary>64-bit Extended General Purpose Event 0 Reg Blk address</summary>
 			public acpi_generic_address X_GPE0Block;
-			/// <summary>64-bit Extended General Purpose Event 1 Reg Blk address</summary>
+			// <summary>64-bit Extended General Purpose Event 1 Reg Blk address</summary>
 			//apublic acpi_generic_address X_GPE1Block;
-			/// <summary>64-bit Sleep Control register (ACPI 5.0)</summary>
+			// <summary>64-bit Sleep Control register (ACPI 5.0)</summary>
 			//public acpi_generic_address sleep_control;
-			/// <summary>64-bit Sleep Status register (ACPI 5.0)</summary>
+			// <summary>64-bit Sleep Status register (ACPI 5.0)</summary>
 			//public acpi_generic_address sleep_status;
 		}
 	}
