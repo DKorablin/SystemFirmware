@@ -12,7 +12,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Identifier of the firmware table provider</summary>
 		public Methods.FirmwareTableType TableType { get ; }
 
-		/// <summary>Crate instanceof base firmware table type with requred data</summary>
+		/// <summary>Crate instanceOf base firmware table type with required data</summary>
 		/// <param name="tableType">Required firmware table</param>
 		public Firmware(Methods.FirmwareTableType tableType)
 			=> this.TableType = tableType;
@@ -31,7 +31,7 @@ namespace AlphaOmega.Debug
 					if(this.TableType == Methods.FirmwareTableType.Firm)
 						throw new NotSupportedException("Not supported for UEFI systems; use 'RSMB' instead.");
 					else goto default;
-				case 0x80070000://The operation completed succesfully
+				case 0x80070000://The operation completed successfully
 					yield break;
 				default:
 					throw new Win32Exception();

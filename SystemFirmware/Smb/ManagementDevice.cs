@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class ManagementDevice : TypeBaseT<SmBios.Type34>
 	{
 		/// <summary>Description</summary>
-		public String Description => base.GetString(base.Type.Description);
+		public String Description => this.GetString(this.Type.Description);
 
 		internal ManagementDevice(SmBios.Type34 type34)
 			: base(type34.Header, type34)

@@ -94,7 +94,7 @@ namespace Demo
 						Console.WriteLine("BIOS Version:\t{0}", bios.Version);
 						Console.WriteLine("Release Date:\t{0}", bios.ReleaseDate);
 						Console.WriteLine("ROM Size:\t{0}", bios.RomSize);
-						Console.WriteLine("Characteristics:", bios.Type.Characteristics);
+						Console.WriteLine("Characteristics:\t{0}", bios.Type.Characteristics);
 						foreach(SmBios.Type0.BiosCharacteristics flag in Enum.GetValues(typeof(SmBios.Type0.BiosCharacteristics)))
 						{
 							Console.WriteLine("\t{0}:\t{1}", flag, Utils.IsFlagSet((Int64)bios.Type.Characteristics, (Int64)flag) ? "YES" : "NO");

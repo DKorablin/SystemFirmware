@@ -7,9 +7,10 @@ namespace AlphaOmega.Debug.Smb
 	public class BiosLanguage : TypeBaseT<SmBios.Type13>
 	{
 		/// <summary>Current language</summary>
-		public String CurrentLanguage => base.GetString(base.Type.CurrentLanguage);
+		public String CurrentLanguage => this.GetString(this.Type.CurrentLanguage);
+
 		/// <summary>All languages</summary>
-		public String[] Languages => base.Strings;
+		public String[] Languages => this.Strings;
 
 		internal BiosLanguage(SmBios.Type13 type13)
 			: base(type13.Header, type13)

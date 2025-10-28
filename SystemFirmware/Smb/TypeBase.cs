@@ -12,8 +12,10 @@ namespace AlphaOmega.Debug.Smb
 		{
 			/// <summary>Facade type for SMBIOS type</summary>
 			public Type TableType { get ; }
+
 			/// <summary>SMBIOS struct type</summary>
 			public Type StructType { get; }
+
 			/// <summary>Constructor for facade</summary>
 			public ConstructorInfo Ctor { get; }
 
@@ -27,8 +29,10 @@ namespace AlphaOmega.Debug.Smb
 
 		/// <summary>SMBIOS header</summary>
 		public SmBios.Header Header { get ; }
+
 		/// <summary>All strings in SMBIOS Type</summary>
 		public String[] Strings { get; protected internal set; }
+
 		/// <summary>Additional variable data</summary>
 		public Byte[] ExData { get; protected internal set; }
 

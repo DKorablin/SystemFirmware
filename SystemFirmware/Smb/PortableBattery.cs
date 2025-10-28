@@ -7,33 +7,38 @@ namespace AlphaOmega.Debug.Smb
 	public class PortableBattery : TypeBaseT<SmBios.Type22>
 	{
 		/// <summary>Location</summary>
-		public String Location => base.GetString(base.Type.Location);
+		public String Location => this.GetString(this.Type.Location);
+
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer => base.GetString(base.Type.Manufacturer);
+		public String Manufacturer => this.GetString(this.Type.Manufacturer);
+
 		/// <summary>Manufacture date</summary>
-		public String ManufactureDate => base.GetString(base.Type.ManufactureDate);
+		public String ManufactureDate => this.GetString(this.Type.ManufactureDate);
+
 		/// <summary>Serial number</summary>
 		/// <exception cref="NotImplementedException">Not implemented Serial Number</exception>
 		public String SerialNumber
 		{
 			get
 			{
-				String result = base.GetString(base.Type.SerialNumber);
+				String result = this.GetString(this.Type.SerialNumber);
 				if(result != null && result[0] != '0')
 					return result;
 
-				if(base.Type.SBDSSerialNumber == 0)
+				if(this.Type.SBDSSerialNumber == 0)
 					throw new NotImplementedException();
 
-				return String.Format("{0:x}-{1:x}-{2:x}-{3:x}", base.Type.Manufacturer, base.Type.DeviceName, base.Type.ManufactureDate, base.Type.SBDSSerialNumber);
+				return String.Format("{0:x}-{1:x}-{2:x}-{3:x}", this.Type.Manufacturer, this.Type.DeviceName, this.Type.ManufactureDate, this.Type.SBDSSerialNumber);
 			}
 		}
 		/// <summary>Device name</summary>
-		public String DeviceName => base.GetString(base.Type.DeviceName);
+		public String DeviceName => this.GetString(this.Type.DeviceName);
+
 		/// <summary>SBDS version number</summary>
-		public String SBDSVersionNumber => base.GetString(base.Type.SBDSVersionNumber);
+		public String SBDSVersionNumber => this.GetString(this.Type.SBDSVersionNumber);
+
 		/// <summary>SBDS Device chemistry</summary>
-		public String SBDSDeviceChemistry => base.GetString(base.Type.SBDSDeviceChemistry);
+		public String SBDSDeviceChemistry => this.GetString(this.Type.SBDSDeviceChemistry);
 
 		internal PortableBattery(SmBios.Type22 type22)
 			: base(type22.Header, type22)

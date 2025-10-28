@@ -7,17 +7,22 @@ namespace AlphaOmega.Debug.Smb
 	public class Processor : TypeBaseT<SmBios.Type4>
 	{
 		/// <summary>Socket Designation</summary>
-		public String SocketDesignation => base.GetString(base.Type.SocketDesignation);
+		public String SocketDesignation => this.GetString(this.Type.SocketDesignation);
+
 		/// <summary>Processor manufacturer</summary>
-		public String ProcessorManufacturer => base.GetString(base.Type.ProcessorManufacturer);
+		public String ProcessorManufacturer => this.GetString(this.Type.ProcessorManufacturer);
+
 		/// <summary>Processor Version</summary>
-		public String ProcessorVersion => base.GetString(base.Type.ProcessorVersion);
+		public String ProcessorVersion => this.GetString(this.Type.ProcessorVersion);
+
 		/// <summary>Serial number</summary>
-		public String SerialNumber => base.GetString(base.Type.SerialNumber);
+		public String SerialNumber => this.GetString(this.Type.SerialNumber);
+
 		/// <summary>Asset type</summary>
-		public String AssetType => base.GetString(base.Type.AssetType);
+		public String AssetType => this.GetString(this.Type.AssetType);
+
 		/// <summary>Part number</summary>
-		public String PartNumber => base.GetString(base.Type.PartNumber);
+		public String PartNumber => this.GetString(this.Type.PartNumber);
 
 		internal Processor(SmBios.Type4 type4)
 			: base(type4.Header, type4)

@@ -9,9 +9,10 @@ namespace AlphaOmega.Debug
 	{
 		private const Int64 FileSize = 1024;
 		private static readonly String[] FileSizeType = new String[] { "bytes", "Kb", "Mb", "Gb", };
-		/// <summary>Convert file size in bytes to string with dimention</summary>
+
+		/// <summary>Convert file size in bytes to string with dimension</summary>
 		/// <param name="length">size in bytes</param>
-		/// <returns>Size with dimention</returns>
+		/// <returns>Size with dimension</returns>
 		public static String FileSizeToString(UInt64 length)
 		{
 			UInt64 constSize = 1;
@@ -28,7 +29,7 @@ namespace AlphaOmega.Debug
 		/// <remarks>Due to the fact that the header describes the size of the structure, then in the structure itself, some values may be less than the structure itself</remarks>
 		/// <typeparam name="T">Structure type</typeparam>
 		/// <param name="header">Header with structure size</param>
-		/// <param name="src">Structure where data will clange</param>
+		/// <param name="src">Structure where data will changed</param>
 		public static void ClearOverflowFields<T>(SmBios.Header header, ref T src) where T : struct
 		{
 			FieldInfo[] fields = src.GetType().GetFields(BindingFlags.Instance | BindingFlags.GetField | BindingFlags.Public | BindingFlags.NonPublic);
@@ -49,7 +50,7 @@ namespace AlphaOmega.Debug
 
 		/// <summary>Convert structure to bytes</summary>
 		/// <typeparam name="T">Structure type</typeparam>
-		/// <param name="data">Struncture data</param>
+		/// <param name="data">Structure data</param>
 		/// <returns>bytes</returns>
 		public static Byte[] ConvertToBytes<T>(T data) where T : struct
 		{

@@ -7,17 +7,17 @@ namespace AlphaOmega.Debug.Smb
 	public class Baseboard : TypeBaseT<SmBios.Type2>
 	{
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer => base.GetString(base.Type.Manufacturer);
+		public String Manufacturer => this.GetString(this.Type.Manufacturer);
 		/// <summary>Product</summary>
-		public String Product => base.GetString(base.Type.Product);
+		public String Product => this.GetString(this.Type.Product);
 		/// <summary>Version</summary>
-		public String Version => base.GetString(base.Type.Version);
+		public String Version => this.GetString(this.Type.Version);
 		/// <summary>Serial number</summary>
-		public String SerialNumber => base.GetString(base.Type.SerialNumber);
+		public String SerialNumber => this.GetString(this.Type.SerialNumber);
 		/// <summary>Asset tag</summary>
-		public String AssetTag => base.GetString(base.Type.AssetTag);
+		public String AssetTag => this.GetString(this.Type.AssetTag);
 		/// <summary>Location in Chassis</summary>
-		public String LocationInChassis => base.GetString(base.Type.LocationInChassis);
+		public String LocationInChassis => this.GetString(this.Type.LocationInChassis);
 
 		internal Baseboard(SmBios.Type2 data)
 			: base(data.Header, data)

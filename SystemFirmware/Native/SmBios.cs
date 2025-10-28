@@ -800,7 +800,7 @@ namespace AlphaOmega.Debug.Native
 			/// </remarks>
 			/// <value>v2.3+</value>
 			public Byte ContainedElementRecordLength;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 			/*/// <summary>Elements, possibly defined by other SMBIOS structures, present in this chassis</summary>
 			/// <value>v2.3+</value>
 			public Byte ContainedElements;
@@ -808,7 +808,6 @@ namespace AlphaOmega.Debug.Native
 			<summary>Number of null-terminated string describing the chassis or enclosure SKU number</summary>
 			<value>v2.7+</value>
 			public Byte SKUNumber;*/
-
 
 			/// <summary>Lock is present</summary>
 			public Boolean ChassisLockPresent => ((this._Type >> 7) & 0x01) == 0x01;
@@ -818,7 +817,7 @@ namespace AlphaOmega.Debug.Native
 
 		/// <summary>Processor Information (Type 4)</summary>
 		/// <remarks>
-		/// he information in this structure (see Table 21) defines the attributes of a single processor; a separate structure instance is provided for each system processor socket/slot.
+		/// The information in this structure (see Table 21) defines the attributes of a single processor; a separate structure instance is provided for each system processor socket/slot.
 		/// For example, a system with an IntelDX2™ processor would have a single structure instance while a system with an IntelSX2™ processor would have a structure to describe the main CPU and a second structure to describe the 80487 co-processor.
 		/// </remarks>
 		/// <value>v2.0+</value>
@@ -1028,7 +1027,7 @@ namespace AlphaOmega.Debug.Native
 				/// <summary>Execute Protection</summary>
 				ExecuteProtection = 1 << 5,
 				/// <summary>Enhanced Virtualization</summary>
-				EnhancedVirtualizatio = 1 << 6,
+				EnhancedVirtualization = 1 << 6,
 				/// <summary>Power/Performance Control</summary>
 				PowerPerformanceControl = 1 << 7,
 				/// <summary>128-bit Capable</summary>
@@ -1835,7 +1834,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Number of Associated Memory Slots</summary>
 			/// <remarks>Defines how many of the Memory Module Information blocks are controlled by this controller</remarks>
 			public Byte NumberOfAssociatedMemorySlots;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary>Memory Module Information (Type 6, Obsolete) structure</summary>
@@ -2136,7 +2135,7 @@ namespace AlphaOmega.Debug.Native
 			public CacheConfigurationLocationType CacheConfigurationLocation => (CacheConfigurationLocationType)((this.CacheConfiguration >> 5) & 3);
 
 			/// <summary>Socketed/not socketed</summary>
-			public Boolean CacheConfigurationSoceted => ((this.CacheConfiguration >> 3) & 1) == 1;
+			public Boolean CacheConfigurationSocketed => ((this.CacheConfiguration >> 3) & 1) == 1;
 
 			/// <summary>Cache level</summary>
 			public Byte CacheConfigurationLevel => (Byte)(this.CacheConfiguration & 3);
@@ -2288,7 +2287,7 @@ namespace AlphaOmega.Debug.Native
 				PcmciaII = 0x13,
 				/// <summary>PCMCIA Type III</summary>
 				PcmciaIII = 0x14,
-				/// <summary>Cardbus</summary>
+				/// <summary>CardBus</summary>
 				CardBus = 0x15,
 				/// <summary>Access Bus Port</summary>
 				AccessBus = 0x16,
@@ -2788,7 +2787,7 @@ namespace AlphaOmega.Debug.Native
 			/// <remarks>Number of peer Segment/Bus/Device/Function/Width groups that follow</remarks>
 			/// <value>v3.2</value>
 			public Byte PeerCount;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 			/*/// <summary>Peer Segment/Bus/Device/Function present in the slot;</summary>
 			/// <value>v3.2</value>
 			[MarshalAs(UnmanagedType.ByValArray, SizeParamIndex = 14)]
@@ -2861,7 +2860,7 @@ namespace AlphaOmega.Debug.Native
 			public Header Header;
 			/// <summary>Number of Devices</summary>
 			public UInt32 NumberOfDevices => (UInt32)(this.Header.Length - 4) / 2;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary>OEM Strings (Type 11)</summary>
@@ -3122,7 +3121,7 @@ namespace AlphaOmega.Debug.Native
 			/// This field’s presence allows future additions to the type list. Software that interprets the following list should not assume a list entry’s length.
 			/// </remarks>
 			public Byte LengthOfEachLogTypeDescriptor;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary>Physical Memory Array (Type 16)</summary>
@@ -3508,7 +3507,7 @@ namespace AlphaOmega.Debug.Native
 			/// <remarks>String number for the manufacturer of this memory device</remarks>
 			/// <value>v2.3+</value>
 			public Byte Manufacturer;
-			/// <summary>Serail number</summary>
+			/// <summary>The serial number</summary>
 			/// <remarks>
 			/// String number for the serial number of this memory device.
 			/// This value is set by the manufacturer and normally is not changeable.
@@ -4453,7 +4452,7 @@ namespace AlphaOmega.Debug.Native
 				AddInCard = 0x0b,
 			}
 
-			/// <summary>Phrobe's physical status</summary>
+			/// <summary>Probe's physical status</summary>
 			public enum StatusType : Byte
 			{
 				/// <summary>Other</summary>
@@ -4618,10 +4617,10 @@ namespace AlphaOmega.Debug.Native
 			public Byte Description;
 
 			/// <summary>Device</summary>
-			/// <remarks>Cooling device physical location of the voltage monitored by this voltage probe (TODO: Промахнулся?)</remarks>
+			/// <remarks>Cooling device physical location of the voltage monitored by this voltage probe (TODO: Missed?)</remarks>
 			public DeviceType Device => (DeviceType)(this.DeviceTypeAndStatus & 0x1f);
 			/// <summary>Status</summary>
-			/// <remarks>Cooling device physical status of the voltage monitored by this voltage probe (TODO: Промахнулся?)</remarks>
+			/// <remarks>Cooling device physical status of the voltage monitored by this voltage probe (TODO: Missed?)</remarks>
 			public StatusType Status => (StatusType)((this.DeviceTypeAndStatus >> 5) & 0x7);
 			/// <summary>Nominal speed</summary>
 			/// <remarks>Nominal value for the cooling device’s rotational speed, in revolutions-per-minute (rpm)</remarks>
@@ -4820,7 +4819,7 @@ namespace AlphaOmega.Debug.Native
 			///					alert management facility when critical conditions occur 
 			/// Bit 0		Inbound Connection Enabled. Identifies whether (1) or not (0)
 			///					the facility is allowed to initiate outbound connections to receive incoming connections
-			///					for the purpose of remote operations or problem managemen
+			///					for the purpose of remote operations or problem management
 			/// </remarks>
 			private Byte Connections;
 			/// <summary>Inbound Connection Enabled</summary>
@@ -4852,7 +4851,7 @@ namespace AlphaOmega.Debug.Native
 			/*/// <summary>Status and Additional Data fields that identify the boot status</summary>
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
 			public Byte[] BootStatus;*/
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary>64-Bit Memory Error Information (Type 33)</summary>
@@ -5065,7 +5064,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Memory Device 1 Handle</summary>
 			/// <remarks>Structure handle that identifies the first Memory Device associated with this channel</remarks>
 			public UInt16 MemoryDevice1Handle;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary> IPMI Device Information (Type 38)</summary>
@@ -5098,7 +5097,7 @@ namespace AlphaOmega.Debug.Native
 
 			/// <summary>SMBIOS type header</summary>
 			public Header Header;
-			/// <summary>INterface type</summary>
+			/// <summary>The interface type</summary>
 			/// <remarks>Baseboard Management Controller (BMC) interface type</remarks>
 			public BmcInterfaceType InterfaceType;
 			/// <summary>IPMI specification revision</summary>
@@ -5155,7 +5154,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Interrupt number</summary>
 			/// <remarks>
 			/// Interrupt number for IPMI System Interface 
-			/// 0x00 = unspecified/unsupporte
+			/// 0x00 = unspecified/unsupported
 			/// </remarks>
 			public Byte InterruptNumber;
 		}
@@ -5347,7 +5346,7 @@ namespace AlphaOmega.Debug.Native
 				// <summary>Enumerated value or updated field content that has not yet been approved for publication in this specification and therefore could not be used in the field referenced by Referenced Offset</summary>
 				// <remarks>This field is the same type and size as the field being referenced by this Additional Information Entry</remarks>
 				//public Byte[] Value;
-				//TODO: Varable length array follows
+				//TODO: Variable length array follows
 			}
 
 			/// <summary>SMBIOS type header</summary>
@@ -5482,7 +5481,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Interface Type specific data length</summary>
 			/// <remarks>Management Controller Host Interface Data as specified by the Interface Type</remarks>
 			public Byte InterfaceTypeSpecificDataLength;
-			//TODO: Varable length array follows
+			//TODO: Variable length array follows
 		}
 
 		/// <summary>Trusted Platform Module Device (Type 43)</summary>

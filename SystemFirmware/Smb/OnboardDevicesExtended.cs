@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class OnboardDevicesExtended : TypeBaseT<SmBios.Type41>
 	{
 		/// <summary>Reference Designation</summary>
-		public String ReferenceDesignation => base.GetString(base.Type.ReferenceDesignation);
+		public String ReferenceDesignation => this.GetString(this.Type.ReferenceDesignation);
 
 		internal OnboardDevicesExtended(SmBios.Type41 type41)
 			: base(type41.Header, type41)

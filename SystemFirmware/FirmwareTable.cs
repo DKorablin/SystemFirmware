@@ -18,7 +18,7 @@ namespace AlphaOmega.Debug
 		/// <summary>Creates instance of base firmware information with external data</summary>
 		/// <param name="tableId">ID of firmware table</param>
 		/// <param name="data">Payload</param>
-		/// <exception cref="ArgumentNullException"><c>data</c> is null or empty</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is null or empty</exception>
 		public FirmwareTable(UInt32 tableId, Byte[] data)
 		{
 			if(data == null || data.Length == 0)

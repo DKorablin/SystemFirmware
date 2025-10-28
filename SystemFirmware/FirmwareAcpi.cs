@@ -23,7 +23,8 @@ namespace AlphaOmega.Debug
 		private void Parse()
 		{
 			UInt32 padding = 0;
-			using(PinnedBufferReader reader = new PinnedBufferReader(base.Data)) {
+			using(PinnedBufferReader reader = new PinnedBufferReader(base.Data))
+			{
 				this._header = reader.BytesToStructure<Acpi.Header>(ref padding);
 
 				switch(this._header.Value.Signature)
@@ -40,7 +41,7 @@ namespace AlphaOmega.Debug
 					break;
 				}
 			}
-			/*// Удаляем заголовок
+			/*// Removing header
 			this._payload = new Byte[payload.Length - padding];
 			Array.Copy(payload, padding, this._payload, 0, this._payload.Length);*/
 		}

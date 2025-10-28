@@ -16,23 +16,23 @@ namespace AlphaOmega.Debug.Smb
 		/// <returns></returns>
 		public IEnumerable<AdditionalInformationEntry> GetAdditionalInformation()
 		{
-			if(base.Type.AdditionalInformationEntriesCount > 0)
+			if(this.Type.AdditionalInformationEntriesCount > 0)
 			{
 				_ = (UInt32)Marshal.SizeOf(typeof(SmBios.Type40.Type40_AdditionalInformation));
-				using(PinnedBufferReader reader = new PinnedBufferReader(base.ExData))
+				using(PinnedBufferReader reader = new PinnedBufferReader(this.ExData))
 				{
 					UInt32 padding = 0;
-					for(Int32 loop = 0; loop < base.Type.AdditionalInformationEntriesCount; loop++)
+					for(Int32 loop = 0; loop < this.Type.AdditionalInformationEntriesCount; loop++)
 					{
 						UInt32 offsetToData = padding;
 						SmBios.Type40.Type40_AdditionalInformation result = reader.BytesToStructure<SmBios.Type40.Type40_AdditionalInformation>(ref offsetToData);
 						padding += result.EntryLength;
 
-						Byte[] exData=null;
+						Byte[] exData = null;
 						if(offsetToData < padding)//Payload available
 							exData = reader.GetBytes(offsetToData, padding - offsetToData);
 
-						yield return new AdditionalInformationEntry(base.Type, result) { Strings = base.Strings, ExData = exData, };
+						yield return new AdditionalInformationEntry(this.Type, result) { Strings = this.Strings, ExData = exData, };
 					}
 				}
 			}

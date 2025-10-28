@@ -12,8 +12,10 @@ namespace AlphaOmega.Debug.Smb
 		{
 			/// <summary>Enabled</summary>
 			public Boolean IsEnabled { get; set; }
+
 			/// <summary>Type</summary>
 			public SmBios.Type10.DeviceType Type { get; set; }
+
 			/// <summary>Name</summary>
 			public String Name { get; set; }
 		}
@@ -26,16 +28,16 @@ namespace AlphaOmega.Debug.Smb
 		/// <returns>List on on board devices</returns>
 		public IEnumerable<DeviceInfo> GetDevices()
 		{
-			for(Int32 loop = 0; loop < base.Type.NumberOfDevices; loop++)
+			for(Int32 loop = 0; loop < this.Type.NumberOfDevices; loop++)
 			{
 				Int32 offset = 2 * loop;
-				Byte type = base.ExData[offset];
-				Byte nameIndex = base.ExData[offset + 1];
+				Byte type = this.ExData[offset];
+				Byte nameIndex = this.ExData[offset + 1];
 				yield return new DeviceInfo()
 				{
 					IsEnabled = (type >> 7 & 0x01) == 0x01,
 					Type = (SmBios.Type10.DeviceType)(type & 0x3f),
-					Name = base.GetString(nameIndex),
+					Name = this.GetString(nameIndex),
 				};
 			}
 		}

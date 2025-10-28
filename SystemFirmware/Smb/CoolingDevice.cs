@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class CoolingDevice : TypeBaseT<SmBios.Type27>
 	{
 		/// <summary>Description</summary>
-		public String Description => base.GetString(base.Type.Description);
+		public String Description => this.GetString(this.Type.Description);
 
 		internal CoolingDevice(SmBios.Type27 type27)
 			: base(type27.Header, type27)

@@ -107,15 +107,13 @@ namespace AlphaOmega.Debug
 					SmBios.Header header = reader.BytesToStructure<SmBios.Header>(padding);
 					TypeBase table = null;
 
-					TypeBase.TypeMapping mapping;
-					if(StructMapping.TryGetValue(header.Type, out mapping))
+					if(StructMapping.TryGetValue(header.Type, out TypeBase.TypeMapping mapping))
 					{
-						Byte[] exBytes;
-						Object typeN = reader.BytesToStructure2(mapping.StructType, padding, header.Length, out exBytes);
+						Object typeN = reader.BytesToStructure2(mapping.StructType, padding, header.Length, out Byte[] exBytes);
 						table = (TypeBase)mapping.Ctor.Invoke(new Object[] { typeN });
 						table.ExData = exBytes;
 
-						//Двигаемся в начало массива строк
+						//Moving to the beginning of the string array
 						padding = padding + header.Length;
 					} else
 					{
@@ -203,12 +201,12 @@ namespace AlphaOmega.Debug
 							break;
 						}
 
-						//Двигаемся в начало массива строк
+						//Moving to the beginning of the string array
 						padding += header.Length;
 
-						//В разных версиях - разный размер структур
+						//Different versions have different sizes of structures.
 						if(structPadding < padding)
-						{//Стуктура меньше чем данные. Необходимо скопировать недостающие
+						{//The structure is smaller than the data. The missing parts need to be copied.
 							table.ExData = new Byte[padding - structPadding];
 							Array.Copy(base.Data, structPadding, table.ExData, 0, table.ExData.Length);
 						}
@@ -223,7 +221,7 @@ namespace AlphaOmega.Debug
 							if(loop == stringStart)
 							{//0x00, 0x00 <- End of array
 								while(base.Data[loop] == 0x00)
-									loop++;//0x00, 0x00, 0x00, 0x00, .... <- Может закончится массивом из нулей
+									loop++;//0x00, 0x00, 0x00, 0x00, .... <- It may end up with an array of zeros.
 								padding = loop;
 								break;
 							} else

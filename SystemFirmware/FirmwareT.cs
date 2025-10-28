@@ -12,9 +12,9 @@ namespace AlphaOmega.Debug
 	{
 		private readonly Dictionary<UInt32, Byte[]> _storage;
 
-		/// <summary>Creates instance of base firmware with previosly collected data</summary>
+		/// <summary>Creates instance of base firmware with previously collected data</summary>
 		/// <param name="data">Full payload with all tables</param>
-		/// <exception cref="ArgumentNullException"><c>data</c> is empty or null</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is empty or null</exception>
 		/// <exception cref="InvalidOperationException">Invalid signature or invalid type</exception>
 		public FirmwareT(Byte[] data)
 			: base(GetTable<T>())
@@ -65,7 +65,7 @@ namespace AlphaOmega.Debug
 			using(MemoryStream stream = new MemoryStream())
 			{
 				UInt32[] tableIDs = this.EnumFirmwareTables()
-					.Distinct()//TODO: Win32 API функция возвращает одинаковые ID'шники для ACPI????
+					.Distinct()//TODO: Win32 API function returns the same IDs for ACPI????
 					.ToArray();
 				if(tableIDs.Length == 0)
 					return new Byte[] { };

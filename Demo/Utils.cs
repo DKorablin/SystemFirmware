@@ -10,17 +10,18 @@ namespace Demo
 		{
 			Utils.ConsoleWriteMembers(null, obj);
 		}
+
 		public static void ConsoleWriteMembers(String title, Object obj)
 		{
 			if(!String.IsNullOrEmpty(title))
 				Console.Write(title + ": ");
 			Console.WriteLine(Utils.GetReflectedMembers(obj));
 		}
+
 		public static String GetReflectedMembers(Object obj)
 		{
 			if(obj == null)
 				return "<NULL>";
-
 
 			StringBuilder result = new StringBuilder();
 			Type objType = obj.GetType();
@@ -39,10 +40,10 @@ namespace Demo
 			return result.ToString();
 		}
 
-		/// <summary>Проверка на установку битового флага в поле</summary>
-		/// <param name="flags">Целочисленное хранилище значение битовых флагов</param>
-		/// <param name="key">Ключ флага, существование которого необходимо получить</param>
-		/// <returns>Флаг установлен</returns>
+		/// <summary>Checking if a bit flag is set in a field</summary>
+		/// <param name="flags">Integer storage for the bit flag value</param>
+		/// <param name="key">The key of the flag whose existence needs to be retrieved</param>
+		/// <returns>The flag is set</returns>
 		public static Boolean IsFlagSet(Int64 flags, Int64 key)
 		{
 			return (flags & key) > 0;

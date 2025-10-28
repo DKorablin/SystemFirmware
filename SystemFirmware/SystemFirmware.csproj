@@ -1,33 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>net35;netstandard2.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<RootNamespace>AlphaOmega.Debug</RootNamespace>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<AssemblyTitle>SystemFirmware</AssemblyTitle>
-		<Company>Danila Korablin</Company>
-		<Product>Native GetSystemFirmware wrapper assembly</Product>
-		<Copyright>Copyright © Danila Korablin 2021</Copyright>
-		<Configuration>Debug</Configuration>
-		<AssemblyVersion>1.0.*</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<Configuration>Release</Configuration>
 		<Deterministic>false</Deterministic>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<OutputPath>bin\Release\</OutputPath>
-		<DocumentationFile>bin\SystemFirmware.xml</DocumentationFile>
-		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<!--nuspec-->
+	<PropertyGroup>
+		<PackageId>AlphaOmega.SystemFirmware</PackageId>
+		<Version>$(Version)</Version>
+		<Title>Wapper around GetSystemFirmware Win32 API function</Title>
+		<Description>Managed wrapper Win32 API functions: GetSystemFirmwareTable and EnumSystemFirmwareTables</Description>
+		<Authors>Danila Korablin</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>docs\README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/DKorablin/SystemFirmware</RepositoryUrl>
+		<PackageTags>Win32;WinAPI;GetSystemFirmware</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\docs" />
+	</ItemGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<Optimize>true</Optimize>
+		<PublishSingleFile>true</PublishSingleFile>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\FileReader.Shared\ImageLoader\PinnedBufferReader.cs">
 			<Link>PinnedBufferReader.cs</Link>
 		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
 	</ItemGroup>
 </Project>

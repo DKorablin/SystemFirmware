@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class SystemSlots : TypeBaseT<SmBios.Type9>
 	{
 		/// <summary>Slot designation</summary>
-		public String SlotDesignation => base.GetString(base.Type.SlotDesignation);
+		public String SlotDesignation => this.GetString(this.Type.SlotDesignation);
 
 		internal SystemSlots(SmBios.Type9 type9)
 			: base(type9.Header, type9)

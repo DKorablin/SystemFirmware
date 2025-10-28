@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class ElectricalCurrentProbe : TypeBaseT<SmBios.Type29>
 	{
 		/// <summary>Description</summary>
-		public String Description => base.GetString(base.Type.Description);
+		public String Description => this.GetString(this.Type.Description);
 
 		internal ElectricalCurrentProbe(SmBios.Type29 type29)
 			: base(type29.Header, type29)

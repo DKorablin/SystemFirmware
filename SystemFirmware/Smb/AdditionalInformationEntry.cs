@@ -7,7 +7,7 @@ namespace AlphaOmega.Debug.Smb
 	public class AdditionalInformationEntry : TypeBaseT<SmBios.Type40.Type40_AdditionalInformation>
 	{
 		/// <summary>Optional string to be associated with the field referenced by the Referenced Offset</summary>
-		public String String => base.GetString(base.Type.String);
+		public String String => this.GetString(this.Type.String);
 
 		internal AdditionalInformationEntry(SmBios.Type40 type40, SmBios.Type40.Type40_AdditionalInformation type40Information)
 			: base(type40.Header, type40Information)

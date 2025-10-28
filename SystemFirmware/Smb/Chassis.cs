@@ -7,13 +7,13 @@ namespace AlphaOmega.Debug.Smb
 	public class Chassis : TypeBaseT<SmBios.Type3>
 	{
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer => base.GetString(base.Type.Manufacturer);
+		public String Manufacturer => this.GetString(this.Type.Manufacturer);
 		/// <summary>Version</summary>
-		public String Version => base.GetString(base.Type.Version);
+		public String Version => this.GetString(this.Type.Version);
 		/// <summary>Serial number</summary>
-		public String SerialNumber => base.GetString(base.Type.SerialNumber);
+		public String SerialNumber => this.GetString(this.Type.SerialNumber);
 		/// <summary>Asset tag</summary>
-		public String AssetTagNumber => base.GetString(base.Type.AssetTagNumber);
+		public String AssetTagNumber => this.GetString(this.Type.AssetTagNumber);
 
 		internal Chassis(SmBios.Type3 data)
 			: base(data.Header, data)

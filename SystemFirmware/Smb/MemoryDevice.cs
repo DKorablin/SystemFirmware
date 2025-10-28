@@ -7,19 +7,25 @@ namespace AlphaOmega.Debug.Smb
 	public class MemoryDevice : TypeBaseT<SmBios.Type17>
 	{
 		/// <summary>Device locator</summary>
-		public String DeviceLocator => base.GetString(base.Type.DeviceLocator);
+		public String DeviceLocator => this.GetString(this.Type.DeviceLocator);
+
 		/// <summary>Bank locator</summary>
-		public String BankLocator => base.GetString(base.Type.BankLocator);
+		public String BankLocator => this.GetString(this.Type.BankLocator);
+
 		/// <summary>Manufacturer</summary>
-		public String Manufacturer => base.GetString(base.Type.Manufacturer);
+		public String Manufacturer => this.GetString(this.Type.Manufacturer);
+
 		/// <summary>Serial number</summary>
-		public String SerialNumber => base.GetString(base.Type.SerialNumber);
+		public String SerialNumber => this.GetString(this.Type.SerialNumber);
+
 		/// <summary>Asset tag</summary>
-		public String AssetTag => base.GetString(base.Type.AssetTag);
+		public String AssetTag => this.GetString(this.Type.AssetTag);
+
 		/// <summary>Part number</summary>
-		public String PartNumber => base.GetString(base.Type.PartNumber);
+		public String PartNumber => this.GetString(this.Type.PartNumber);
+
 		/// <summary>Firmware version</summary>
-		public String FirmwareVersion => base.GetString(base.Type.FirmwareVersion);
+		public String FirmwareVersion => this.GetString(this.Type.FirmwareVersion);
 
 		internal MemoryDevice(SmBios.Type17 type17)
 			: base(type17.Header, type17)
