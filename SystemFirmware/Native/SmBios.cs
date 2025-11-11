@@ -168,6 +168,7 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Inactive (Type 126)</summary>
 			Inactive = 126,
 			/// <summary>End-of-Table (Type 127)</summary>
+			/// <remarks>Marks the end of the SMBIOS structure table</remarks>
 			EoT = 127,
 		}
 
@@ -3065,13 +3066,13 @@ namespace AlphaOmega.Debug.Native
 			/// <summary>Log Area Length</summary>
 			/// <remarks>Length, in bytes, of the overall event log area, from the first byte of header to the last byte of data</remarks>
 			public UInt16 LogAreaLength;
-			/// <summary>Log Header Start Offset</summary>
+			/// <summary>Starting offset within non-volatile storage of the event log's header from the Access Method Address</summary>
 			/// <remarks>
 			/// Defines the starting offset (or index) within the nonvolatile storage of the event-log’s header,
 			/// from the Access Method Address For single-byte indexed I/O accesses, the most-significant byte of the start offset is set to 0x00.
 			/// </remarks>
 			public UInt16 LogHeaderStartOffset;
-			/// <summary>Log Data Start Offset</summary>
+			/// <summary>Starting offset of the event log's first data byte (header length = LogDataStartOffset - LogHeaderStartOffset)</summary>
 			/// <remarks>
 			/// Defines the starting offset (or index) within the nonvolatile storage of the event-log’s first data byte,
 			/// from the Access Method Address For single-byte indexed I/O accesses, the most-significant byte of the start offset is set to 0x00.
@@ -3079,10 +3080,10 @@ namespace AlphaOmega.Debug.Native
 			/// The data directly follows any header information. Therefore, the header length can be determined by subtracting the Header Start Offset from the Data Start Offset.
 			/// </remarks>
 			public UInt16 LogDataStartOffset;
-			/// <summary>Access method</summary>
+			/// <summary>Defines the location and method for accessing the log area</summary>
 			/// <remarks>Defines the Location and Method used by higher-level software to access the log area</remarks>
 			public AccessMethodType AccessMethod;
-			/// <summary>Log status</summary>
+			/// <summary>Current status of the event log</summary>
 			/// <remarks>
 			/// Current status of the system event-log: 
 			/// Bits 7:2	Reserved, set to 0s 
@@ -3090,10 +3091,10 @@ namespace AlphaOmega.Debug.Native
 			/// Bit 0		Log area valid, if 1
 			/// </remarks>
 			public Byte LogStatus;
-			/// <summary>Log Change Token</summary>
+			/// <summary>Unique token reassigned when the event log changes (used to detect new events)</summary>
 			/// <remarks>Unique token that is reassigned every time the event log changes Can be used to determine if additional events have occurred since the last time the log was read.</remarks>
 			public UInt16 LogChangeToken;
-			/// <summary>Access Method Address</summary>
+			/// <summary>Address associated with the access method</summary>
 			/// <remarks>
 			/// Address associated with the access method.
 			/// The data present depends on the Access Method field value The area’s format can be described by the following 1-byte-packed "C" union:
@@ -3109,10 +3110,10 @@ namespace AlphaOmega.Debug.Native
 			/// } AccessMethodAddress;
 			/// </remarks>
 			public UInt16 AccessMethodAddress;
-			/// <summary>Log Header Format</summary>
+			/// <summary>Format of the log header area (NoHeader or Type1LogHeader)</summary>
 			/// <remarks>Format of the log header area</remarks>
 			public LogHeaderType LogHeaderFormat;
-			/// <summary>Number of Supported Log Type Descriptors (x)</summary>
+			/// <summary>Number of supported log type descriptors</summary>
 			/// <remarks>If the value is 0, the list that starts at offset 0x17 is not present</remarks>
 			public Byte NumberOfSupportedLogTypeDescriptors;
 			/// <summary>Length of each Log Type Descriptor (y)</summary>
@@ -4828,6 +4829,40 @@ namespace AlphaOmega.Debug.Native
 			public Boolean OutboundConnectionEnabled => ((this.Connections >> 1) & 0x01) == 0x01;
 		}
 
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		public struct Type31
+		{
+			/// <summary>SMBIOS type header</summary>
+			public Header Header;
+
+			/// <summary>Checksum value for BIS Entry Point structure</summary>
+			public Byte Checksum;
+
+			/// <summary>Reserved</summary>
+			/// <remarks>Reserved for future use; set to all zeros</remarks>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public Byte[] Reserved;
+
+			/// <summary>BIS Entry Point Address (16-bit offset)</summary>
+			/// <remarks>
+			/// 16-bit offset component of the BIS entry point address.
+			/// Used with BIS Entry Point Segment to form a complete address.
+			/// </remarks>
+			public UInt16 BISEntryPointAddress;
+
+			/// <summary>BIS Entry Point Segment</summary>
+			/// <remarks>
+			/// 16-bit segment component of the BIS entry point address.
+			/// Combined with BIS Entry Point Address using segment:offset addressing (real mode).
+			/// </remarks>
+			public UInt16 BISEntryPointSegment;
+
+			/// <summary>Reserved for BIS implementation</summary>
+			/// <remarks>Reserved for BIS implementation-specific data</remarks>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+			public Byte[] ReservedForBIS;
+		}
+
 		/// <summary>System Boot Information (Type 32)</summary>
 		/// <remarks>
 		/// The client system firmware (for example, BIOS) communicates the System Boot Status to the client’s Pre-boot Execution Environment (PXE)
@@ -5544,6 +5579,85 @@ namespace AlphaOmega.Debug.Native
 			/// Vendor ID string of "ABCD" = (41 42 43 44)
 			/// </example>
 			public String VendorID => Encoding.ASCII.GetString(this._VendorID);
+		}
+
+		/// <summary>Processor Additional Information (Type 44)</summary>
+		/// <remarks>
+		/// This structure provides additional information about processor characteristics.
+		/// This structure is primarily intended for RISC-V processors to provide additional processor-specific information.
+		/// </remarks>
+		/// <value>v3.3+</value>
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		public struct Type44
+		{
+			/// <summary>The types of processor architectures</summary>
+			public enum ProcessorType : Byte
+			{
+				/// <summary>Reserved</summary>
+				Reserved = 0x01,
+				/// <summary>Reserved</summary>
+				Reserved2 = 0x02,
+				/// <summary>Reserved</summary>
+				Reserved3 = 0x03,
+				/// <summary>Reserved</summary>
+				Reserved4 = 0x04,
+				/// <summary>Reserved</summary>
+				Reserved5 = 0x05,
+				/// <summary>IA-32 (x86)</summary>
+				IA32_x86 = 0x06,
+				/// <summary>x64 (x86-64, Intel64, AMD64, EM64T)</summary>
+				x64_x86_64_Intel64_AMD64_EM64T = 0x07,
+				/// <summary>Intel Itanium architecture</summary>
+				Intel_Itanium = 0x08,
+				/// <summary>32-bit ARM (Aarch32)</summary>
+				ARM_Aarch32 = 0x09,
+				/// <summary>64-bit ARM (Aarch64)</summary>
+				ARM_Aarch64 = 0x0A,
+				/// <summary>32-bit RISC-V (RV32)</summary>
+				RISC_V_RV32 = 0x0B,
+				/// <summary>64-bit RISC-V (RV64)</summary>
+				RISC_V_RV64 = 0x0C,
+				/// <summary>128-bit RISC-V (RV128)</summary>
+				RISC_V_RV128 = 0x0D,
+				/// <summary>LoongArch 32-bit</summary>
+				LoongArch_32bit = 0x0E,
+				/// <summary>LoongArch 64-bit</summary>
+				LoongArch_64bit = 0x0F,
+			}
+
+			/// <summary>SMBIOS type header</summary>
+			public Header Header;
+
+			/// <summary>Referenced Handle</summary>
+			/// <remarks>
+			/// Handle, or instance number, associated with the Processor structure (Type 4) 
+			/// that this structure provides additional information for.
+			/// </remarks>
+			public UInt16 ReferencedHandle;
+
+			/// <summary>Processor-Specific Block Length</summary>
+			/// <remarks>
+			/// Length of the Processor-Specific Data block that follows.
+			/// A value of 0 indicates no Processor-Specific Data is provided.
+			/// </remarks>
+			public Byte ProcessorSpecificBlockLength;
+
+			/// <summary>Processor Type</summary>
+			public ProcessorType Processor;
+
+			// Variable-length Processor-Specific Data block follows
+			// For RISC-V processors, this contains:
+			// - Hart ID
+			// - Boot Hart flag
+			// - Machine Vendor ID
+			// - Machine Architecture ID
+			// - Machine Implementation ID
+			// - ISA supported
+			// - Privilege levels supported
+			// - Machine exception delegation register
+			// - Machine interrupt delegation register
+			// - Register width (XLEN)
+			// - Various RISC-V extension information
 		}
 	}
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -640,6 +638,65 @@ namespace AlphaOmega.Debug.Native
 			//public acpi_generic_address sleep_control;
 			// <summary>64-bit Sleep Status register (ACPI 5.0)</summary>
 			//public acpi_generic_address sleep_status;
+		}
+
+		/// <summary>MCFG - PCI Express Memory Mapped Configuration Space Base Address Description Table</summary>
+		/// <remarks>
+		/// This table describes the base address of the PCI Express memory-mapped configuration space.
+		/// The memory-mapped configuration space is used for accessing PCI Express configuration registers.
+		/// </remarks>
+		[StructLayout(LayoutKind.Sequential)]
+		public struct Mcfg
+		{
+			/// <summary>Reserved - must be zero</summary>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+			public Byte[] Reserved;
+
+			public Boolean IsValid => this.Reserved != null && Array.TrueForAll(this.Reserved, b => b == 0);
+
+			// Variable-length array of allocation structures follows
+			// Each allocation structure is 16 bytes and describes one PCI segment group
+		}
+
+		/// <summary>MCFG Allocation Structure</summary>
+		/// <remarks>
+		/// Each structure describes the base address and segment group for a contiguous range of PCI buses.
+		/// Multiple allocation structures may exist to describe multiple PCI segment groups.
+		/// </remarks>
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		public struct McfgAllocation
+		{
+			/// <summary>Base Address of Enhanced Configuration Mechanism</summary>
+			/// <remarks>
+			/// 64-bit base address of the memory-mapped configuration space.
+			/// This address is the base for the memory-mapped configuration space for the PCI segment group.
+			/// </remarks>
+			public UInt64 BaseAddress;
+
+			/// <summary>PCI Segment Group Number</summary>
+			/// <remarks>
+			/// Segment group number as defined in the PCI Firmware Specification.
+			/// For platforms with fewer than 255 PCI buses, this is 0.
+			/// </remarks>
+			public UInt16 PciSegmentGroupNumber;
+
+			/// <summary>Start PCI Bus Number</summary>
+			/// <remarks>
+			/// First PCI bus number decoded by this host bridge.
+			/// Start bus number in this segment group's memory-mapped configuration space.
+			/// </remarks>
+			public Byte StartBusNumber;
+
+			/// <summary>End PCI Bus Number</summary>
+			/// <remarks>
+			/// Last PCI bus number decoded by this host bridge.
+			/// End bus number in this segment group's memory-mapped configuration space.
+			/// </remarks>
+			public Byte EndBusNumber;
+
+			/// <summary>Reserved - must be zero</summary>
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+			public Byte[] Reserved;
 		}
 	}
 }

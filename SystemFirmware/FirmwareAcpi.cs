@@ -37,6 +37,22 @@ namespace AlphaOmega.Debug
 					} else
 						throw new NotImplementedException("The size of FADT structure belongs to different ACPI version and not supported");
 					break;
+				case Acpi.Table.MCFG:
+					Int32 sizeMcfg = Marshal.SizeOf(typeof(Acpi.Mcfg));
+					if(this.Data.Length - padding >= sizeMcfg)
+					{
+						Acpi.Mcfg mcfg = reader.BytesToStructure<Acpi.Mcfg>(ref padding);
+						if(mcfg.IsValid)
+						{
+							Int32 sizeMcfgAllocation = Marshal.SizeOf(typeof(Acpi.McfgAllocation));
+							Int32 entries = (Int32)((this.Data.Length - padding) / sizeMcfgAllocation);
+							Acpi.McfgAllocation[] allocations = new Acpi.McfgAllocation[entries];
+							for(Int32 i = 0; i < entries; i++)
+								allocations[i] = reader.BytesToStructure<Acpi.McfgAllocation>(ref padding);
+						}
+					} else
+						throw new NotImplementedException("The size of FADT structure belongs to different ACPI version and not supported");
+					break;
 				default:
 					break;
 				}

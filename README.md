@@ -38,26 +38,26 @@ using AlphaOmega.Debug.Smb;
 
 class Program
 {
-    static void Main()
-    {
-        FirmwareT<FirmwareSmBios> fw = new FirmwareT<FirmwareSmBios>();
-        FirmwareSmBios smbios = fw.GetData().Single();
+	static void Main()
+	{
+		FirmwareT<FirmwareSmBios> fw = new FirmwareT<FirmwareSmBios>();
+		FirmwareSmBios smbios = fw.GetData().Single();
 
-        // Motherboard vendor and name
-        Baseboard baseboard = smbios.GetType<Baseboard>();
-        Console.WriteLine($"Motherboard Manufacturer: {baseboard.Manufacturer} Name: {baseboard.Product}");
+		// Motherboard vendor and name
+		Baseboard baseboard = smbios.GetType<Baseboard>();
+		Console.WriteLine($"Motherboard Manufacturer: {baseboard.Manufacturer} Name: {baseboard.Product}");
 
-        // Find USB 3.0 ports (example logic)
-        foreach (TypeBase type in smbios.Types)
-            switch (type.Header.Type)
-            {
-                case SmBios.Type.PortConnector:
-                    PortConnector port = (PortConnector)type;
-                    if (port.Type.Port == SmBios.Type8.PortType.USB && port.InternalReferenceDesignator.StartsWith("USB_3", StringComparison.OrdinalIgnoreCase))
-                        Console.WriteLine("USB 3.0 port found");
-                    break;
-            }
-    }
+		// Find USB 3.0 ports (example logic)
+		foreach (TypeBase type in smbios.Types)
+			switch (type.Header.Type)
+			{
+				case SmBios.Type.PortConnector:
+					PortConnector port = (PortConnector)type;
+					if (port.Type.Port == SmBios.Type8.PortType.USB && port.InternalReferenceDesignator.StartsWith("USB_3", StringComparison.OrdinalIgnoreCase))
+						Console.WriteLine("USB 3.0 port found");
+					break;
+			}
+	}
 }
 ```
 
@@ -68,8 +68,8 @@ FirmwareSmBios smbios = fw.GetData().Single();
 
 foreach (TypeBase type in smbios.Types)
 {
-    Console.WriteLine($"Type {type.Header.Type} Length: {type.Header.Length}");
-    // Cast based on type.Header.Type if further detail is needed
+	Console.WriteLine($"Type {type.Header.Type} Length: {type.Header.Length}");
+	// Cast based on type.Header.Type if further detail is needed
 }
 ```
 
@@ -84,15 +84,15 @@ System.IO.File.WriteAllBytes(@"C:\Temp\Firmware\smbios.sfw", data);
 // Load
 try
 {
-    FirmwareT<FirmwareSmBios> loaded = new FirmwareT<FirmwareSmBios>(System.IO.File.ReadAllBytes(@"C:\Temp\Firmware\smbios.sfw"));
+	FirmwareT<FirmwareSmBios> loaded = new FirmwareT<FirmwareSmBios>(System.IO.File.ReadAllBytes(@"C:\Temp\Firmware\smbios.sfw"));
 }
 catch (ArgumentNullException)
 {
-    // Empty file
+	// Empty file
 }
 catch (ArgumentException)
 {
-    // Invalid signature or wrong firmware type (e.g. ACPI data passed)
+	// Invalid signature or wrong firmware type (e.g. ACPI data passed)
 }
 ```
 

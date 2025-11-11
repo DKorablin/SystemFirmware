@@ -159,6 +159,10 @@ namespace AlphaOmega.Debug
 							SmBios.Type30 type30 = reader.BytesToStructure<SmBios.Type30>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type30>(header, type30);
 							break;
+						case SmBios.Type.BisEntryPoint:
+							SmBios.Type31 type31 = reader.BytesToStructure<SmBios.Type31>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type31>(header, type31);
+							break;
 						case SmBios.Type.SystemBootInformation:
 							SmBios.Type32 type32 = reader.BytesToStructure<SmBios.Type32>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type32>(header, type32);
@@ -179,6 +183,18 @@ namespace AlphaOmega.Debug
 							SmBios.Type38 type38 = reader.BytesToStructure<SmBios.Type38>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type38>(header, type38);
 							break;
+						case SmBios.Type.SystemPowerSupply:
+							SmBios.Type39 type39 = reader.BytesToStructure<SmBios.Type39>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type39>(header, type39);
+							break;
+						case SmBios.Type.AdditionalInformation:
+							SmBios.Type40 type40 = reader.BytesToStructure<SmBios.Type40>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type40>(header, type40);
+							break;
+						case SmBios.Type.OnboardDevicesExtended:
+							SmBios.Type41 type41 = reader.BytesToStructure<SmBios.Type41>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type41>(header, type41);
+							break;
 						case SmBios.Type.ManagementControllerHostInterface:
 							SmBios.Type42 type42 = reader.BytesToStructure<SmBios.Type42>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type42>(header, type42);
@@ -186,6 +202,10 @@ namespace AlphaOmega.Debug
 						case SmBios.Type.TpmDevice:
 							SmBios.Type43 type43 = reader.BytesToStructure<SmBios.Type43>(ref structPadding);
 							table = new TypeBaseT<SmBios.Type43>(header, type43);
+							break;
+						case SmBios.Type.ProcessorAdditionalInformation:
+							SmBios.Type44 type44 = reader.BytesToStructure<SmBios.Type44>(ref structPadding);
+							table = new TypeBaseT<SmBios.Type44>(header, type44);
 							break;
 						case SmBios.Type.EoT:
 							if(header.Length == 4)
